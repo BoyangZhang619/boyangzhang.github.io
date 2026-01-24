@@ -14,6 +14,19 @@
       "updateTime": "2026-01-02"
     },
     {
+      "id": "todolist",
+      "href": "https://todo.zbyblq.xin",
+      "icon": "📝",
+      "title": "TodoList",
+      "desc": "一个简单易用的在线待办事项管理工具,使用将一年设置为36*10天的时间管理方法,支持任务导入导出系统",
+      "tags": ["工具"],
+      "badge": "TODO IT!!!",
+      "badgeColor": "#73bae0",
+      "status": "active",
+      "createTime": "2026-01-01",
+      "updateTime": "2026-01-02"
+    },
+    {
       "id": "cny-blessing",
       "href": "https://greeting.zbyblq.xin",
       "icon": "🧧",
