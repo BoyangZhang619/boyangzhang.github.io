@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>色觉筛查（模块A+B）</title>
+  <link rel="stylesheet" href="./css/main.css" />
+</head>
+<body>
+
+  <main class="wrap">
+    <header class="top">
+      <div class="titleRow">
+        <h1>色觉筛查</h1>
+        <a class="chip" href="/" title="返回导航主页">↩︎ Home</a>
+      </div>
+
+      <p class="sub">
+        这是<strong>筛查/自测</strong>与科普工具，不是医学诊断；显示设备、环境光、夜间/护眼模式会显著影响结果。
+      </p>
+
+      <div class="row seedRow">
+        <div class="seedBox">
+          <span class="muted">本次 Seed：</span>
+          <code id="seedView">—</code>
+        </div>
+        <button id="copyLinkBtn" class="btn ghost">复制可分享链接</button>
+        <button id="newSeedBtn" class="btn ghost">换一套随机</button>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="模块切换">
+      <button class="tab active" data-tab="A" aria-controls="panelA" aria-selected="true">模块A：筛查题板</button>
+      <button class="tab" data-tab="B" aria-controls="panelB" aria-selected="false">模块B：阈值测试</button>
+    </nav>
+
+    <!-- ============ 模块A ============ -->
+    <section id="panelA" class="panel active" role="region" aria-label="模块A">
+      <div class="card">
+        <h2>开始前校准（必做）</h2>
+        <div class="checklist">
+          <label class="check"><input type="checkbox" id="okNight"> 我已关闭夜间/护眼/色彩增强（含 True Tone / Night Shift 等）</label>
+          <label class="check"><input type="checkbox" id="okLight"> 我已将屏幕亮度调至中等，并避免反光/强背光</label>
+          <label class="check"><input type="checkbox" id="okExplain"> 我理解网页结果仅供筛查参考，不构成诊断</label>
+        </div>
+
+        <details class="adv">
+          <summary>高级设置</summary>
+          <div class="grid2">
+            <label class="field">
+              <span>题数（建议 14~20）</span>
+              <input id="aCount" type="number" min="10" max="30" value="16" />
+            </label>
+            <label class="field">
+              <span>每题限时（秒）</span>
+              <input id="aTime" type="number" min="4" max="15" value="8" />
+            </label>
+            <label class="check"><input type="checkbox" id="aIncludeTritan"> 加入少量蓝黄筛查（tritan）</label>
+            <label class="check"><input type="checkbox" id="aMoreBlank" checked> 启用“空板”可靠性检测（推荐）</label>
+          </div>
+          <p class="muted small">
+            说明：本页使用随机生成的“伪等色题板”，并用色觉缺陷模拟做基本验证筛选；仍会受设备影响。
+          </p>
+        </details>
+
+        <div class="row">
+          <button id="startA" class="btn primary" disabled>开始模块A</button>
+          <button id="resetA" class="btn ghost" disabled>重置A</button>
+        </div>
+      </div>
+
+      <div class="card stage">
+        <div class="stageTop">
+          <div class="meterWrap" aria-label="进度">
+            <div class="meter"><div id="aProgressBar" class="meterBar"></div></div>
+            <div class="meterText">
+              <span id="aQIndex">—</span>
+              <span class="muted">/</span>
+              <span id="aQTotal">—</span>
+            </div>
+          </div>
+
+          <div class="timerWrap">
+            <div class="meter small"><div id="aTimerBar" class="meterBar"></div></div>
+            <div class="meterText"><span id="aTimerText">—</span><span class="muted">s</span></div>
+          </div>
+        </div>
+
+        <div class="canvasWrap">
+          <canvas id="plate" class="canvasSquare" aria-label="筛查题板"></canvas>
+        </div>
+
+        <div class="answerRow">
+          <label class="field grow">
+            <span class="muted">你看到的数字（两位）</span>
+            <input id="ans" inputmode="numeric" autocomplete="off" maxlength="2" placeholder="例如 12" />
+          </label>
+          <button id="submitAns" class="btn primary">提交</button>
+          <button id="cantSee" class="btn ghost">看不清 / 没有</button>
+        </div>
+
+        <p class="muted small" id="aHint">
+          提示：尽量不要猜。看不清就点“看不清/没有”。
+        </p>
+      </div>
+
+      <div class="card" id="resultA">
+        <h2>模块A结果</h2>
+        <div class="muted">开始测试后，这里会显示统计与倾向提示。</div>
+      </div>
+    </section>
+
+    <!-- ============ 模块B ============ -->
+    <section id="panelB" class="panel" role="region" aria-label="模块B">
+      <div class="card">
+        <h2>阈值测试（2AFC + 自适应 Staircase）</h2>
+        <p class="muted small">
+          每轮 A/B 两块区域中只有一块“略有差异”，请选择<strong>哪一块不同</strong>。
+          系统会自适应调难度，收敛到你的区分阈值（筛查性质）。
+        </p>
+
+        <div class="grid2">
+          <label class="field">
+            <span>顺序</span>
+            <select id="bOrder">
+              <option value="all" selected>依次完成 Hue → Luminance → Saturation</option>
+              <option value="hue">只测 Hue</option>
+              <option value="lum">只测 Luminance</option>
+              <option value="sat">只测 Saturation</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>每轴轮数（建议 28~40）</span>
+            <input id="bTrials" type="number" min="20" max="60" value="34" />
+          </label>
+        </div>
+
+        <div class="row">
+          <button id="startB" class="btn primary">开始模块B</button>
+          <button id="resetB" class="btn ghost" disabled>重置B</button>
+        </div>
+      </div>
+
+      <div class="card stage">
+        <div class="stageTop">
+          <div class="meterWrap">
+            <div class="meter"><div id="bProgressBar" class="meterBar"></div></div>
+            <div class="meterText">
+              <span id="bAxisName">—</span>
+              <span class="muted">·</span>
+              <span id="bQIndex">—</span><span class="muted">/</span><span id="bQTotal">—</span>
+            </div>
+          </div>
+          <div class="pill" id="bDeltaPill">Δ —</div>
+        </div>
+
+        <div class="twoCanvases">
+          <button class="stimBtn" id="pickA" aria-label="选择 A 不同">
+            <div class="stimLabel">A</div>
+            <canvas id="stimA" class="canvasRect"></canvas>
+          </button>
+
+          <button class="stimBtn" id="pickB" aria-label="选择 B 不同">
+            <div class="stimLabel">B</div>
+            <canvas id="stimB" class="canvasRect"></canvas>
+          </button>
+        </div>
+
+        <p class="muted small">
+          你也可以用键盘：按 <kbd>A</kbd> 或 <kbd>B</kbd>（桌面端）。
+        </p>
+      </div>
+
+      <div class="card" id="resultB">
+        <h2>模块B结果</h2>
+        <div class="muted">完成测试后，这里会显示阈值估计。</div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="row">
+        <button id="exportBtn" class="btn ghost">导出本次结果（JSON）</button>
+        <button id="copyJsonBtn" class="btn ghost">复制结果 JSON</button>
+      </div>
+      <pre id="exportOut" class="export"></pre>
+    </footer>
+  </main>
+
+  <script defer src="./js/main.js"></script>
+</body>
+</html>
