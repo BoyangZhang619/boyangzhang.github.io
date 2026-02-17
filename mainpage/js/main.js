@@ -1,3 +1,4 @@
+console.log("关于这网站的名字--zbyblq\n其中zby是我的名字拼音首字母\n而blq则有所不同,他其实是数字619的象形字,我最早用619这个数字在我的互联网账号的时间其实是在小学快初中的时候,那时候为了玩minecraft bedrock版,而为了进服务器和联机我创了一个xbox账号,而当时我看很多玩家后面都带个数字,我就想了想用什么数字好,最后就选了619,这个数字甚至还是旋转对称的,我的minecraft名是zhangby619,后来我的游戏账号名,互联网账号都是直接用这个或者后缀,至于网站为什么是zby+blq呢,zby而不是zhangby是因为我要域名名称短一点,而blq而不是619也是因为我觉得数字不太好看,而且blq是619的象形字,所以就这样了\n很多人看到我用619会觉得这是我的生日或者啥我喜欢的人的生日之类的(想象力很厉害了),不过的确很少见把一个没有象征意义的数字用在自身的人,哈哈\n2026-2-9/18:23:12.619");
 // ============================================
 // 【主页导航系统】
 // ============================================
@@ -64,11 +65,23 @@ const NavSystem = {
 
     // 加载导航项数据
     async loadNavItems() {
-        const response = await fetch(this.paths.navItems);
-        if (!response.ok) throw new Error('导航数据加载失败');
-        const data = await response.json();
-        this.data.navItems = data.items || [];
-        this.data.settings = data.settings || {};
+        try {
+            const response = await fetch('../functions/data/tags');
+            if (!response.ok) throw new Error('导航数据加载失败');
+            const data = await response.json();
+            this.data.navItems = data.tags || [];
+            this.data.IP = data.IP || 'Unknown';
+            this.data.auth = data.auth || 'guest';
+            this.data.settings = data.settings || {};
+            document.querySelector('.footer p').textContent = `© 2025-${new Date().getFullYear()} zby | Powered by JavaScript | Your IP: ${this.data.IP} | Auth: ${'guest' || this.data.auth}`;
+            // console.log('hello?');
+            // console.log('🔍 导航项数据加载成功:', this.data.navItems.length, '项');
+            // console.log('🔍 用户信息及数据访问权限:', this.data.IP, this.data.auth);
+        } catch (error) {
+            console.error('❌ 导航项数据加载失败:', error);
+            this.data.navItems = [];
+            this.data.settings = {};
+        }
     },
 
     // 应用主题到CSS变量
