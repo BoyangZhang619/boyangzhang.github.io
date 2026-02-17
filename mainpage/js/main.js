@@ -76,7 +76,7 @@ const NavSystem = {
             });
             if (!response.ok) throw new Error('导航数据加载失败');
             const data = await response.json();
-            this.data.navItems = data.tags || [];
+            this.data.navItems = data.tags.items || [];
             this.data.IP = data.IP || 'Unknown';
             this.data.auth = data.auth || 'guest';
             this.data.settings = data.settings || {};
