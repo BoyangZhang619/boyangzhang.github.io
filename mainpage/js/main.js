@@ -66,11 +66,11 @@ const NavSystem = {
     // 加载导航项数据
     async loadNavItems() {
         try {
-            const response = await fetch('../functions/data/tags', {
+            const response = await fetch('/data/tags', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'cache': 'no-cache no-store',
+                    'cache-control': 'no-cache no-store',
                 },
                 body: JSON.stringify({ auth: 'zby' })
             });
