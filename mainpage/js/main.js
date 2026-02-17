@@ -66,7 +66,14 @@ const NavSystem = {
     // 加载导航项数据
     async loadNavItems() {
         try {
-            const response = await fetch('../functions/data/tags');
+            const response = await fetch('../functions/data/tags', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'cache': 'no-cache no-store',
+                },
+                body: JSON.stringify({ auth: 'zby' })
+            });
             if (!response.ok) throw new Error('导航数据加载失败');
             const data = await response.json();
             this.data.navItems = data.tags || [];
