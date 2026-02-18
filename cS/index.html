@@ -25,7 +25,7 @@
 
         h1 {
             text-align: center;
-            font-size: 1.2rem;
+            font-size: 1.75rem;
             margin-bottom: 20px;
             color: #7f8c8d;
         }
@@ -439,6 +439,128 @@
             transition: opacity 0.3s;
             z-index: 100;
         }
+
+        /* 数据总结区域 */
+        .summary-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px 18px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .summary-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .summary-player {
+            background: var(--bg-color);
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        .summary-player-name {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .summary-stat {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #666;
+            padding: 3px 4px;
+        }
+
+        .summary-stat-val {
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .summary-stat-val.s-pos { color: var(--danger-color); }
+        .summary-stat-val.s-neg { color: var(--success-color); }
+
+        /* 导入导出区域 */
+        .transfer-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px 18px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .transfer-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        .btn-export {
+            width: 100%;
+            padding: 12px 0;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+        .btn-export:active { opacity: 0.85; }
+
+        .import-area {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .import-area textarea {
+            width: 100%;
+            min-height: 60px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.8rem;
+            font-family: 'Courier New', Courier, monospace;
+            resize: vertical;
+            box-sizing: border-box;
+            color: var(--text-color);
+        }
+
+        .import-area textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-import {
+            width: 100%;
+            padding: 10px 0;
+            background: #f0f0f0;
+            color: #555;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-import:active { background: #e0e0e0; }
     </style>
 </head>
 <body>
@@ -531,6 +653,22 @@
         </ul>
     </div>
 
+    <!-- 数据总结 -->
+    <div class="summary-section">
+        <div class="summary-title">📊 数据总结</div>
+        <div class="summary-grid" id="summaryGrid"></div>
+    </div>
+
+    <!-- 导入导出 -->
+    <div class="transfer-section">
+        <div class="transfer-title">💾 数据管理</div>
+        <button class="btn-export" onclick="exportData()">📋 导出数据到剪贴板</button>
+        <div class="import-area">
+            <textarea id="importInput" placeholder="在此粘贴导入的 JSON 数据..."></textarea>
+            <button class="btn-import" onclick="importData()">📥 导入数据</button>
+        </div>
+    </div>
+
     <div class="reset-section">
         <button class="btn-reset" onclick="resetGame()">重置所有分数</button>
     </div>
@@ -565,6 +703,7 @@
             loadHistory();
             renderScores();
             renderHistory();
+            renderSummary();
             updatePreview();
         };
 
@@ -674,6 +813,7 @@
 
             renderScores();
             renderHistory();
+            renderSummary();
             saveState();
             saveHistory();
 
@@ -691,6 +831,7 @@
 
             renderScores();
             renderHistory();
+            renderSummary();
             saveState();
             saveHistory();
             showToast("已回退");
@@ -793,6 +934,7 @@
                 document.getElementById('multiplierN').innerText = '0';
                 renderScores();
                 renderHistory();
+                renderSummary();
                 saveState();
                 saveHistory();
                 updatePreview();
@@ -838,6 +980,129 @@
             document.getElementById('scoreEditOverlay').classList.remove('show');
             showToast("分数已修改");
             editingPlayerIdx = -1;
+        }
+
+        // 渲染数据总结
+        function renderSummary() {
+            const names = getPlayerNames();
+            const grid = document.getElementById('summaryGrid');
+
+            // 从历史记录中统计
+            const stats = names.map((name, idx) => {
+                let totalGames = 0, wins = 0, losses = 0, asLandlord = 0, landlordWins = 0;
+
+                history.forEach(h => {
+                    totalGames++;
+                    const d = h.deltas[idx];
+                    if (d > 0) wins++;
+                    else if (d < 0) losses++;
+
+                    // 判断该局谁是地主：地主的 delta 绝对值是其他人的2倍
+                    // 地主 delta = ±2*base, 农民 delta = ±base
+                    const absDelta = h.deltas.map(x => Math.abs(x));
+                    const maxDelta = Math.max(...absDelta);
+                    if (maxDelta > 0 && Math.abs(d) === maxDelta) {
+                        asLandlord++;
+                        if (d > 0) landlordWins++;
+                    }
+                });
+
+                return { name, totalGames, wins, losses, asLandlord, landlordWins };
+            });
+
+            grid.innerHTML = stats.map(s => {
+                const scoreVal = state.scores[stats.indexOf(s)];
+                const scoreCls = scoreVal > 0 ? 's-pos' : (scoreVal < 0 ? 's-neg' : '');
+                const winRate = s.totalGames > 0 ? Math.round(s.wins / s.totalGames * 100) : 0;
+                return `
+                    <div class="summary-player">
+                        <div class="summary-player-name">${s.name}</div>
+                        <div class="summary-stat"><span>当前分</span><span class="summary-stat-val ${scoreCls}">${scoreVal > 0 ? '+' : ''}${scoreVal}</span></div>
+                        <div class="summary-stat"><span>总局数</span><span class="summary-stat-val">${s.totalGames}</span></div>
+                        <div class="summary-stat"><span>胜/负</span><span class="summary-stat-val">${s.wins}/${s.losses}</span></div>
+                        <div class="summary-stat"><span>胜率</span><span class="summary-stat-val">${winRate}%</span></div>
+                        <div class="summary-stat"><span>当地主</span><span class="summary-stat-val">${s.asLandlord}次</span></div>
+                        <div class="summary-stat"><span>地主胜</span><span class="summary-stat-val">${s.landlordWins}次</span></div>
+                    </div>`;
+            }).join('');
+        }
+
+        // 导出数据
+        function exportData() {
+            const names = getPlayerNames();
+            const data = {
+                scores: state.scores,
+                names: names,
+                history: history,
+                scoreMode: scoreMode,
+                baseScore: document.getElementById('baseScore').value,
+                customScore: document.getElementById('customScore').value,
+                multiplierN: document.getElementById('multiplierN').innerText,
+                exportTime: new Date().toLocaleString('zh-CN')
+            };
+            const jsonStr = JSON.stringify(data);
+            navigator.clipboard.writeText(jsonStr).then(() => {
+                showToast("数据已复制到剪贴板");
+            }).catch(() => {
+                // 降级方案
+                const ta = document.createElement('textarea');
+                ta.value = jsonStr;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast("数据已复制到剪贴板");
+            });
+        }
+
+        // 导入数据
+        function importData() {
+            const input = document.getElementById('importInput').value.trim();
+            if (!input) {
+                showToast("请先粘贴数据");
+                return;
+            }
+            try {
+                const data = JSON.parse(input);
+                if (!data.scores || !Array.isArray(data.scores) || data.scores.length !== 3) {
+                    showToast("数据格式不正确");
+                    return;
+                }
+                if (!confirm("导入将覆盖当前所有数据，确定继续吗？")) return;
+
+                // 恢复分数
+                state.scores = data.scores;
+
+                // 恢复名字
+                if (data.names && data.names.length === 3) {
+                    const nameEls = document.querySelectorAll('.player-name');
+                    data.names.forEach((name, i) => { if (nameEls[i]) nameEls[i].innerText = name; });
+                    localStorage.setItem('ddz_names', JSON.stringify(data.names));
+                }
+
+                // 恢复历史
+                if (data.history && Array.isArray(data.history)) {
+                    history = data.history;
+                }
+
+                // 恢复设置
+                if (data.baseScore) document.getElementById('baseScore').value = data.baseScore;
+                if (data.customScore) document.getElementById('customScore').value = data.customScore;
+                if (data.multiplierN) document.getElementById('multiplierN').innerText = data.multiplierN;
+                if (data.scoreMode) switchMode(data.scoreMode);
+
+                renderScores();
+                renderHistory();
+                renderSummary();
+                saveState();
+                saveHistory();
+                updatePreview();
+
+                document.getElementById('importInput').value = '';
+                showToast("数据导入成功");
+            } catch (e) {
+                showToast("JSON 格式错误，请检查数据");
+            }
         }
     </script>
 </body>
