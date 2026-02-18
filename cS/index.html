@@ -563,6 +563,80 @@
             cursor: pointer;
         }
         .btn-import:active { background: #e0e0e0; }
+
+        /* 折线图区域 */
+        .chart-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px 18px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .btn-save-chart {
+            padding: 5px 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-save-chart:active { opacity: 0.85; }
+
+        .chart-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .chart-container canvas {
+            display: block;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.78rem;
+            color: #666;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .chart-empty {
+            text-align: center;
+            color: #bbb;
+            font-size: 0.85rem;
+            padding: 30px 0;
+        }
     </style>
 </head>
 <body>
@@ -661,6 +735,18 @@
         <div class="summary-grid" id="summaryGrid"></div>
     </div>
 
+    <!-- 积分折线图 -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <span class="chart-title">📈 积分走势</span>
+            <button class="btn-save-chart" onclick="saveChart()">💾 保存图片</button>
+        </div>
+        <div class="chart-container" id="chartContainer">
+            <canvas id="scoreChart"></canvas>
+        </div>
+        <div class="chart-legend" id="chartLegend"></div>
+    </div>
+
     <!-- 导入导出 -->
     <div class="transfer-section">
         <div class="transfer-title">💾 数据管理</div>
@@ -706,6 +792,7 @@
             renderScores();
             renderHistory();
             renderSummary();
+            renderChart();
             updatePreview();
         };
 
@@ -796,9 +883,10 @@
                 state.scores[i] += deltas[i];
             }
 
-            // 生成时间
+            // 生成时间（包含日期）
             const now = new Date();
-            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            const timeStr = (now.getMonth() + 1) + '/' + now.getDate() + ' ' +
+                String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
             // 生成描述
             const desc = `${names[ldIdx]}(地主) ${isLandlordWin ? '赢' : '输'} | 分值 ${basePoints}`;
@@ -816,6 +904,7 @@
             renderScores();
             renderHistory();
             renderSummary();
+            renderChart();
             saveState();
             saveHistory();
 
@@ -834,6 +923,7 @@
             renderScores();
             renderHistory();
             renderSummary();
+            renderChart();
             saveState();
             saveHistory();
             showToast("已回退");
@@ -924,7 +1014,23 @@
 
         function loadHistory() {
             const saved = localStorage.getItem('ddz_history');
-            if (saved) history = JSON.parse(saved);
+            if (saved) {
+                history = JSON.parse(saved);
+                // 兼容旧数据：给缺失日期的记录补上当天日期
+                let needSave = false;
+                const today = new Date();
+                const todayPrefix = (today.getMonth() + 1) + '/' + today.getDate() + ' ';
+                history.forEach(h => {
+                    // 旧格式只有 "HH:MM"（长度5且不含 /），新格式 "M/D HH:MM"
+                    if (h.time && !h.time.includes('/')) {
+                        h.time = todayPrefix + h.time;
+                        needSave = true;
+                    }
+                });
+                if (needSave) {
+                    localStorage.setItem('ddz_history', JSON.stringify(history));
+                }
+            }
         }
 
         function resetGame() {
@@ -937,6 +1043,7 @@
                 renderScores();
                 renderHistory();
                 renderSummary();
+                renderChart();
                 saveState();
                 saveHistory();
                 updatePreview();
@@ -1085,6 +1192,14 @@
                 // 恢复历史
                 if (data.history && Array.isArray(data.history)) {
                     history = data.history;
+                    // 兼容旧格式：补日期
+                    const today = new Date();
+                    const todayPrefix = (today.getMonth() + 1) + '/' + today.getDate() + ' ';
+                    history.forEach(h => {
+                        if (h.time && !h.time.includes('/')) {
+                            h.time = todayPrefix + h.time;
+                        }
+                    });
                 }
 
                 // 恢复设置
@@ -1096,6 +1211,7 @@
                 renderScores();
                 renderHistory();
                 renderSummary();
+                renderChart();
                 saveState();
                 saveHistory();
                 updatePreview();
@@ -1105,6 +1221,262 @@
             } catch (e) {
                 showToast("JSON 格式错误，请检查数据");
             }
+        }
+
+        // 折线图颜色
+        const chartColors = ['#3498db', '#e74c3c', '#2ecc71'];
+
+        // 从历史记录构建各玩家积分序列
+        function buildScoreSeries() {
+            // history[0]是最新的，需要反转为时间正序
+            const ordered = [...history].reverse();
+            const series = [[], [], []]; // 三个玩家
+            const labels = []; // 横轴标签（时间）
+
+            // 起始点：第一条记录的 prevScores
+            if (ordered.length > 0) {
+                labels.push('起始');
+                for (let p = 0; p < 3; p++) {
+                    series[p].push(ordered[0].prevScores[p]);
+                }
+            }
+
+            // 每一条记录结束后的分数
+            ordered.forEach((h, i) => {
+                labels.push(h.time || `#${i + 1}`);
+                for (let p = 0; p < 3; p++) {
+                    const prev = series[p][series[p].length - 1];
+                    series[p].push(prev + h.deltas[p]);
+                }
+            });
+
+            return { series, labels };
+        }
+
+        // 绘制折线图
+        function renderChart() {
+            const container = document.getElementById('chartContainer');
+            const canvas = document.getElementById('scoreChart');
+            const legend = document.getElementById('chartLegend');
+            const names = getPlayerNames();
+
+            if (history.length === 0) {
+                canvas.style.display = 'none';
+                legend.innerHTML = '';
+                container.innerHTML = '<div class="chart-empty">暂无数据，结算后将生成走势图</div><canvas id="scoreChart" style="display:none"></canvas>';
+                return;
+            }
+
+            canvas.style.display = 'block';
+            // 移除可能被替换的空提示
+            const emptyEl = container.querySelector('.chart-empty');
+            if (emptyEl) emptyEl.remove();
+
+            const { series, labels } = buildScoreSeries();
+            const pointCount = labels.length;
+
+            // 计算尺寸
+            const dpr = window.devicePixelRatio || 1;
+            const padLeft = 45;
+            const padRight = 20;
+            const padTop = 20;
+            const padBottom = 45;
+            const minPointSpacing = 50;
+            const chartWidth = Math.max(container.clientWidth, padLeft + padRight + (pointCount - 1) * minPointSpacing);
+            const chartHeight = 220;
+
+            canvas.width = chartWidth * dpr;
+            canvas.height = chartHeight * dpr;
+            canvas.style.width = chartWidth + 'px';
+            canvas.style.height = chartHeight + 'px';
+
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, chartWidth, chartHeight);
+
+            // 绘图区域
+            const drawW = chartWidth - padLeft - padRight;
+            const drawH = chartHeight - padTop - padBottom;
+
+            // 计算数据范围
+            let allVals = series.flat();
+            let minVal = Math.min(...allVals);
+            let maxVal = Math.max(...allVals);
+            if (minVal === maxVal) { minVal -= 5; maxVal += 5; }
+            const range = maxVal - minVal;
+            const padding = range * 0.12;
+            minVal -= padding;
+            maxVal += padding;
+
+            // 工具函数
+            function xPos(i) { return padLeft + (pointCount > 1 ? (i / (pointCount - 1)) * drawW : drawW / 2); }
+            function yPos(v) { return padTop + drawH - ((v - minVal) / (maxVal - minVal)) * drawH; }
+
+            // 背景
+            ctx.fillStyle = '#fafbfc';
+            ctx.fillRect(0, 0, chartWidth, chartHeight);
+
+            // 网格线 + Y 轴刻度
+            ctx.strokeStyle = '#eee';
+            ctx.lineWidth = 1;
+            ctx.fillStyle = '#aaa';
+            ctx.font = '11px -apple-system, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+
+            const yTicks = 5;
+            for (let i = 0; i <= yTicks; i++) {
+                const val = minVal + (maxVal - minVal) * (i / yTicks);
+                const y = yPos(val);
+                ctx.beginPath();
+                ctx.moveTo(padLeft, y);
+                ctx.lineTo(chartWidth - padRight, y);
+                ctx.stroke();
+                ctx.fillText(Math.round(val), padLeft - 6, y);
+            }
+
+            // 零线
+            if (minVal < 0 && maxVal > 0) {
+                ctx.strokeStyle = '#ccc';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 3]);
+                const zeroY = yPos(0);
+                ctx.beginPath();
+                ctx.moveTo(padLeft, zeroY);
+                ctx.lineTo(chartWidth - padRight, zeroY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // X 轴标签
+            ctx.fillStyle = '#aaa';
+            ctx.font = '10px -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            // 智能标签：检测是否跨天，跨天时显示日期，同天只显示时间
+            const labelStep = Math.max(1, Math.ceil(pointCount / 10));
+            let lastDate = '';
+            for (let i = 0; i < pointCount; i++) {
+                if (i % labelStep === 0 || i === pointCount - 1) {
+                    let displayLabel = labels[i];
+                    // 解析 "M/D HH:MM" 格式
+                    const parts = displayLabel.split(' ');
+                    if (parts.length === 2) {
+                        const datePart = parts[0]; // "M/D"
+                        const timePart = parts[1]; // "HH:MM"
+                        if (datePart !== lastDate) {
+                            // 新的一天，显示日期+时间
+                            displayLabel = datePart + '\n' + timePart;
+                            lastDate = datePart;
+                        } else {
+                            // 同一天，只显示时间
+                            displayLabel = timePart;
+                        }
+                    }
+                    // 处理换行
+                    const lines = displayLabel.split('\n');
+                    lines.forEach((line, li) => {
+                        ctx.fillText(line, xPos(i), chartHeight - padBottom + 6 + li * 12);
+                    });
+                }
+            }
+
+            // 画折线
+            series.forEach((data, pIdx) => {
+                const color = chartColors[pIdx];
+
+                // 线
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5;
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                data.forEach((v, i) => {
+                    const x = xPos(i);
+                    const y = yPos(v);
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+
+                // 数据点
+                data.forEach((v, i) => {
+                    const x = xPos(i);
+                    const y = yPos(v);
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#fff';
+                    ctx.fill();
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                });
+
+                // 末尾数值标注
+                if (data.length > 0) {
+                    const lastVal = data[data.length - 1];
+                    const lx = xPos(data.length - 1);
+                    const ly = yPos(lastVal);
+                    ctx.fillStyle = color;
+                    ctx.font = 'bold 11px -apple-system, sans-serif';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText((lastVal > 0 ? '+' : '') + lastVal, lx + 8, ly);
+                }
+            });
+
+            // 图例
+            legend.innerHTML = names.map((name, i) => `
+                <span class="legend-item">
+                    <span class="legend-color" style="background:${chartColors[i]}"></span>
+                    ${name}
+                </span>
+            `).join('');
+        }
+
+        // 保存图片
+        function saveChart() {
+            if (history.length === 0) {
+                showToast("暂无数据");
+                return;
+            }
+            const canvas = document.getElementById('scoreChart');
+            // 创建带白色背景的临时 canvas（用于保存）
+            const dpr = window.devicePixelRatio || 1;
+            const tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = canvas.width;
+            tmpCanvas.height = canvas.height;
+            const tmpCtx = tmpCanvas.getContext('2d');
+            tmpCtx.fillStyle = '#ffffff';
+            tmpCtx.fillRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+            tmpCtx.drawImage(canvas, 0, 0);
+
+            // 底部加图例文字
+            const names = getPlayerNames();
+            tmpCtx.scale(dpr, dpr);
+            tmpCtx.font = 'bold 12px -apple-system, sans-serif';
+            tmpCtx.textAlign = 'center';
+            const cw = canvas.width / dpr;
+            const legendY = canvas.height / dpr - 5;
+            names.forEach((name, i) => {
+                const x = cw / 2 + (i - 1) * 80;
+                tmpCtx.fillStyle = chartColors[i];
+                tmpCtx.fillRect(x - 30, legendY - 5, 12, 4);
+                tmpCtx.fillText(name, x + 5, legendY);
+            });
+
+            tmpCanvas.toBlob(blob => {
+                if (!blob) { showToast("保存失败"); return; }
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '斗地主积分走势_' + new Date().toLocaleDateString('zh-CN').replace(/\//g, '-') + '.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast("图片已保存");
+            }, 'image/png');
         }
     </script>
 </body>
