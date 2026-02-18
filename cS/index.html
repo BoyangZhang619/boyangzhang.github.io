@@ -282,9 +282,11 @@
         /* 历史记录区域 */
         .history-section {
             background: var(--card-bg);
+            max-height: 500px;
             border-radius: 15px;
             padding: 15px 18px;
             margin-top: 20px;
+            overflow: scroll;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
@@ -662,10 +664,10 @@
     <!-- 导入导出 -->
     <div class="transfer-section">
         <div class="transfer-title">💾 数据管理</div>
-        <button class="btn-export" onclick="exportData()">📋 导出数据到剪贴板</button>
+        <button class="btn-export" onclick="exportData()">📋 点击复制数据到剪贴板</button>
         <div class="import-area">
             <textarea id="importInput" placeholder="在此粘贴导入的 JSON 数据..."></textarea>
-            <button class="btn-import" onclick="importData()">📥 导入数据</button>
+            <button class="btn-import" onclick="importData()">📥 确认导入数据</button>
         </div>
     </div>
 
