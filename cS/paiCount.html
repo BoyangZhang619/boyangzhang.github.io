@@ -22,12 +22,12 @@
             color: var(--text-main);
             /* 防止iOS点击高亮 */
             -webkit-tap-highlight-color: transparent; 
-            padding-bottom: 80px; /* 给底部按钮留空 */
+            padding-bottom: 56px; /* 给底部按钮留空 */
         }
 
         header {
             background: #fff;
-            padding: 15px;
+            padding: 10px 15px 8px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             position: sticky;
@@ -37,19 +37,34 @@
 
         h1 {
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
 
+        .progress-bar {
+            margin-top: 6px;
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #36cfc9);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
         /* 列表容器 */
         .card-list {
-            padding: 10px;
+            padding: 6px 8px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 5px;
         }
 
         /* 单行卡片样式 */
@@ -57,16 +72,16 @@
             display: flex;
             align-items: center;
             background: var(--card-item-bg);
-            padding: 8px 15px;
-            border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            padding: 4px 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
             transition: all 0.2s;
+            min-height: 36px;
         }
 
-        /* 牌出完了的样式 */
+        /* 牌出完了的样式（跟随长方形变灰，不整行消失） */
         .card-row.empty {
-            opacity: 0.4;
-            background: #e6e6e6;
+            opacity: 0.75;
         }
 
         /* 炸弹/王还在的警示样式 */
@@ -77,8 +92,8 @@
 
         /* 左侧：牌面展示 */
         .card-face {
-            width: 50px;
-            font-size: 1.4rem;
+            width: 40px;
+            font-size: 1.1rem;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -86,47 +101,64 @@
         }
         
         .suit-decor {
-            font-size: 0.8rem;
-            margin-right: 4px;
+            font-size: 0.7rem;
+            margin-right: 3px;
             color: var(--text-sub);
         }
 
         .red-card { color: #d63031; }
         .black-card { color: #2d3436; }
-        .joker-big { color: #d63031; font-size: 1.6rem; }
-        .joker-small { color: #2d3436; font-size: 1.6rem; }
+        .joker-big { color: #d63031; font-size: 1.2rem; }
+        .joker-small { color: #2d3436; font-size: 1.2rem; }
 
-        /* 中间：剩余数量 */
+        /* 中间：剩余数量（竖长方形） */
         .card-count {
             flex: 1;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
-        /* 当数量为0时颜色 */
-        .card-row.empty .card-count {
-            color: #999;
+        .card-bar {
+            width: 10px;
+            height: 22px;
+            border-radius: 3px;
+            background: var(--primary-color);
+            transition: all 0.2s;
+        }
+
+        .card-bar.gone {
+            background: #e0e0e0;
+        }
+
+        /* 王的长方形稍宽一些 */
+        .card-count.joker-count .card-bar {
+            width: 16px;
+        }
+
+        /* 当数量为0时长方形全灰 */
+        .card-row.empty .card-bar {
+            background: #ddd;
         }
         
         /* 数量警示色 */
-        .card-row.warning .card-count {
-            color: var(--danger-color);
+        .card-row.warning .card-bar:not(.gone) {
+            background: var(--danger-color);
         }
 
         /* 右侧：操作按钮 */
         .actions {
             display: flex;
-            gap: 10px;
+            gap: 6px;
         }
 
         .btn {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             border: none;
-            font-size: 1.2rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -147,6 +179,20 @@
         }
         .btn-plus:active { background-color: #d6efff; }
 
+        .btn:disabled {
+            opacity: 0.25;
+            cursor: default;
+        }
+
+        /* 操作闪烁反馈 */
+        @keyframes rowFlash {
+            0% { background-color: #fffbe6; }
+            100% { background-color: var(--card-item-bg); }
+        }
+        .card-row.flash {
+            animation: rowFlash 0.4s ease;
+        }
+
         /* 底部重置栏 */
         .bottom-bar {
             position: fixed;
@@ -154,41 +200,88 @@
             left: 0;
             width: 100%;
             background: white;
-            padding: 10px;
+            padding: 6px 10px;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
             display: flex;
             justify-content: center;
+            gap: 8px;
             box-sizing: border-box;
         }
 
+        .btn-undo {
+            width: 42px;
+            padding: 8px 0;
+            background: #fff3e0;
+            color: #e67e22;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .btn-undo:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .btn-undo:active:not(:disabled) { background: #ffe0b2; }
+
         .btn-reset {
-            width: 90%;
-            padding: 12px;
+            flex: 1;
+            padding: 8px;
             background: var(--text-main);
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         /* 小屏幕适配 */
         @media (max-width: 320px) {
-            .card-row { padding: 8px 10px; }
-            .card-face { width: 40px; font-size: 1.2rem; }
+            .card-row { padding: 3px 8px; }
+            .card-face { width: 35px; font-size: 1rem; }
+            .btn { width: 28px; height: 28px; font-size: 0.9rem; }
+        }
+
+        /* 横屏适配：两列排布 */
+        @media (orientation: landscape) {
+            .card-list {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 4px;
+                padding: 6px 8px;
+            }
+            .card-row {
+                padding: 3px 8px;
+            }
+            .card-count {
+                gap: 4px;
+            }
+            .card-bar {
+                width: 8px;
+                height: 18px;
+            }
+            .btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+            body {
+                padding-bottom: 46px;
+            }
         }
 
         /* 右上角跳转按钮 */
         .nav-btn {
             position: fixed;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
             z-index: 200;
             background: #1890ff;
             color: white;
             border: none;
-            padding: 8px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -203,13 +296,17 @@
     <a href="index.html" class="nav-btn">📊 计分板</a>
 
     <header>
-        <h1>🃏 记牌器 <span style="font-size:0.8rem; font-weight:normal; color:#666; margin-left:10px;">剩余: <span id="total-count">54</span></span></h1>
+        <h1>🃏 记牌器 <span style="font-size:0.8rem; font-weight:normal; color:#666; margin-left:10px;">剩余: <span id="total-count">54</span> / 54</span></h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
     </header>
 
     <div class="card-list" id="app">
         </div>
 
     <div class="bottom-bar">
+        <button class="btn-undo" id="btnUndo" onclick="undo()" disabled>↩</button>
         <button class="btn-reset" onclick="resetAll()">⟳ 重置新的一局</button>
     </div>
 
@@ -235,6 +332,7 @@
         ];
 
         let cards = JSON.parse(JSON.stringify(initialCards));
+        let undoStack = []; // 撤销栈，最多保留20步
 
         // 渲染函数
         function render() {
@@ -268,30 +366,33 @@
                     faceHtml = `<span class="suit-decor">${card.icon}</span> ${card.label}`;
                 }
 
+                // 生成竖长方形
+                let barsHtml = '';
+                for (let d = 0; d < card.max; d++) {
+                    barsHtml += `<span class="card-bar${d >= card.count ? ' gone' : ''}"></span>`;
+                }
+
+                const isJoker = card.id.includes('joker');
+
                 row.innerHTML = `
                     <div class="card-face ${card.color}">
                         ${faceHtml}
                     </div>
-                    <div class="card-count">
-                        ${card.count}
+                    <div class="card-count${isJoker ? ' joker-count' : ''}">
+                        ${barsHtml}
                     </div>
                     <div class="actions">
-                        <button class="btn btn-minus" onclick="updateCount(${index}, -1)">－</button>
-                        <button class="btn btn-plus" onclick="updateCount(${index}, 1)">＋</button>
+                        <button class="btn btn-minus" onclick="updateCount(${index}, -1)" ${card.count === 0 ? 'disabled' : ''}>－</button>
+                        <button class="btn btn-plus" onclick="updateCount(${index}, 1)" ${card.count === card.max ? 'disabled' : ''}>＋</button>
                     </div>
                 `;
                 
-                // 点击整行也可以减少（除了按钮区域）
-                row.addEventListener('click', (e) => {
-                    if (e.target.tagName !== 'BUTTON') {
-                        updateCount(index, -1);
-                    }
-                });
-
                 container.appendChild(row);
             });
             
             document.getElementById('total-count').innerText = totalRemaining;
+            document.getElementById('progressFill').style.width = ((54 - totalRemaining) / 54 * 100) + '%';
+            document.getElementById('btnUndo').disabled = undoStack.length === 0;
         }
 
         // 更新数量逻辑
@@ -300,15 +401,36 @@
             const newCount = card.count + delta;
 
             if (newCount >= 0 && newCount <= card.max) {
+                // 保存快照用于撤销
+                undoStack.push(cards.map(c => c.count));
+                if (undoStack.length > 20) undoStack.shift();
+
                 card.count = newCount;
                 saveCards();
                 render();
+
+                // 闪烁反馈
+                const rows = document.querySelectorAll('.card-row');
+                if (rows[index]) {
+                    rows[index].classList.add('flash');
+                    setTimeout(() => rows[index].classList.remove('flash'), 400);
+                }
                 
                 // 简单的震动反馈 (Android支持较好)
                 if (navigator.vibrate) {
                     navigator.vibrate(30); 
                 }
             }
+        }
+
+        // 撤销
+        function undo() {
+            if (undoStack.length === 0) return;
+            const prev = undoStack.pop();
+            prev.forEach((c, i) => { if (cards[i]) cards[i].count = c; });
+            saveCards();
+            render();
+            if (navigator.vibrate) navigator.vibrate(30);
         }
 
         // localStorage 存取
@@ -331,6 +453,7 @@
         function resetAll() {
             if(confirm('确定重置所有牌吗？')) {
                 cards = JSON.parse(JSON.stringify(initialCards));
+                undoStack = [];
                 saveCards();
                 render();
             }
