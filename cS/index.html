@@ -224,6 +224,26 @@
             padding: 10px;
         }
 
+        /* 右上角跳转按钮 */
+        .nav-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 200;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-btn:active { transform: scale(0.95); }
+
         /* 提示信息 */
         .toast {
             position: fixed;
@@ -242,6 +262,8 @@
     </style>
 </head>
 <body>
+
+    <a href="paiCount.html" class="nav-btn">🃏 记牌器</a>
 
     <h1>斗地主计分板</h1>
 

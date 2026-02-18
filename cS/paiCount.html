@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🂡 斗地主记牌器</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-item-bg: #ffffff;
+            --primary-color: #1890ff;
+            --danger-color: #ff4d4f;
+            --text-main: #333;
+            --text-sub: #888;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            /* 防止iOS点击高亮 */
+            -webkit-tap-highlight-color: transparent; 
+            padding-bottom: 80px; /* 给底部按钮留空 */
+        }
+
+        header {
+            background: #fff;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* 列表容器 */
+        .card-list {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* 单行卡片样式 */
+        .card-row {
+            display: flex;
+            align-items: center;
+            background: var(--card-item-bg);
+            padding: 8px 15px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+
+        /* 牌出完了的样式 */
+        .card-row.empty {
+            opacity: 0.4;
+            background: #e6e6e6;
+        }
+
+        /* 炸弹/王还在的警示样式 */
+        .card-row.warning {
+            border-left: 5px solid var(--danger-color);
+            background: #fff1f0;
+        }
+
+        /* 左侧：牌面展示 */
+        .card-face {
+            width: 50px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .suit-decor {
+            font-size: 0.8rem;
+            margin-right: 4px;
+            color: var(--text-sub);
+        }
+
+        .red-card { color: #d63031; }
+        .black-card { color: #2d3436; }
+        .joker-big { color: #d63031; font-size: 1.6rem; }
+        .joker-small { color: #2d3436; font-size: 1.6rem; }
+
+        /* 中间：剩余数量 */
+        .card-count {
+            flex: 1;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* 当数量为0时颜色 */
+        .card-row.empty .card-count {
+            color: #999;
+        }
+        
+        /* 数量警示色 */
+        .card-row.warning .card-count {
+            color: var(--danger-color);
+        }
+
+        /* 右侧：操作按钮 */
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .btn-minus {
+            background-color: #ffecec;
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+        .btn-minus:active { background-color: #ffdcdc; }
+
+        .btn-plus {
+            background-color: #e6f7ff;
+            color: var(--primary-color);
+        }
+        .btn-plus:active { background-color: #d6efff; }
+
+        /* 底部重置栏 */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .btn-reset {
+            width: 90%;
+            padding: 12px;
+            background: var(--text-main);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        /* 小屏幕适配 */
+        @media (max-width: 320px) {
+            .card-row { padding: 8px 10px; }
+            .card-face { width: 40px; font-size: 1.2rem; }
+        }
+
+        /* 右上角跳转按钮 */
+        .nav-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 200;
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-btn:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="nav-btn">📊 计分板</a>
+
+    <header>
+        <h1>🃏 记牌器 <span style="font-size:0.8rem; font-weight:normal; color:#666; margin-left:10px;">剩余: <span id="total-count">54</span></span></h1>
+    </header>
+
+    <div class="card-list" id="app">
+        </div>
+
+    <div class="bottom-bar">
+        <button class="btn-reset" onclick="resetAll()">⟳ 重置新的一局</button>
+    </div>
+
+    <script>
+        // 初始化数据
+        // Unicode: 🃏 (Joker), ♠ ♥ ♣ ♦ (Suits)
+        const initialCards = [
+            { id: 'big_joker', label: '大王', icon: '🃏', color: 'red-card', count: 1, max: 1 },
+            { id: 'small_joker', label: '小王', icon: '🃏', color: 'black-card', count: 1, max: 1 },
+            { id: '2', label: '2', icon: '♠', color: 'black-card', count: 4, max: 4 },
+            { id: 'A', label: 'A', icon: '♥', color: 'red-card', count: 4, max: 4 },
+            { id: 'K', label: 'K', icon: '♣', color: 'black-card', count: 4, max: 4 },
+            { id: 'Q', label: 'Q', icon: '♦', color: 'red-card', count: 4, max: 4 },
+            { id: 'J', label: 'J', icon: '♠', color: 'black-card', count: 4, max: 4 },
+            { id: '10', label: '10', icon: '♥', color: 'red-card', count: 4, max: 4 },
+            { id: '9', label: '9', icon: '♣', color: 'black-card', count: 4, max: 4 },
+            { id: '8', label: '8', icon: '♦', color: 'red-card', count: 4, max: 4 },
+            { id: '7', label: '7', icon: '♠', color: 'black-card', count: 4, max: 4 },
+            { id: '6', label: '6', icon: '♥', color: 'red-card', count: 4, max: 4 },
+            { id: '5', label: '5', icon: '♣', color: 'black-card', count: 4, max: 4 },
+            { id: '4', label: '4', icon: '♦', color: 'red-card', count: 4, max: 4 },
+            { id: '3', label: '3', icon: '♠', color: 'black-card', count: 4, max: 4 },
+        ];
+
+        let cards = JSON.parse(JSON.stringify(initialCards));
+
+        // 渲染函数
+        function render() {
+            const container = document.getElementById('app');
+            container.innerHTML = '';
+            
+            let totalRemaining = 0;
+
+            cards.forEach((card, index) => {
+                totalRemaining += card.count;
+                
+                const row = document.createElement('div');
+                row.className = 'card-row';
+                
+                // 状态样式判断
+                if (card.count === 0) {
+                    row.classList.add('empty');
+                } else if (card.count === card.max && card.max >= 4) {
+                    // 炸弹警告
+                    row.classList.add('warning');
+                } else if (card.max === 1 && card.count === 1) {
+                    // 王还在警告
+                    row.classList.add('warning');
+                }
+
+                // 区分王和普通牌的显示逻辑
+                let faceHtml = '';
+                if (card.id.includes('joker')) {
+                    faceHtml = `<span class="${card.id === 'big_joker' ? 'joker-big' : 'joker-small'}">${card.icon}</span>`;
+                } else {
+                    faceHtml = `<span class="suit-decor">${card.icon}</span> ${card.label}`;
+                }
+
+                row.innerHTML = `
+                    <div class="card-face ${card.color}">
+                        ${faceHtml}
+                    </div>
+                    <div class="card-count">
+                        ${card.count}
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-minus" onclick="updateCount(${index}, -1)">－</button>
+                        <button class="btn btn-plus" onclick="updateCount(${index}, 1)">＋</button>
+                    </div>
+                `;
+                
+                // 点击整行也可以减少（除了按钮区域）
+                row.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'BUTTON') {
+                        updateCount(index, -1);
+                    }
+                });
+
+                container.appendChild(row);
+            });
+            
+            document.getElementById('total-count').innerText = totalRemaining;
+        }
+
+        // 更新数量逻辑
+        function updateCount(index, delta) {
+            const card = cards[index];
+            const newCount = card.count + delta;
+
+            if (newCount >= 0 && newCount <= card.max) {
+                card.count = newCount;
+                saveCards();
+                render();
+                
+                // 简单的震动反馈 (Android支持较好)
+                if (navigator.vibrate) {
+                    navigator.vibrate(30); 
+                }
+            }
+        }
+
+        // localStorage 存取
+        function saveCards() {
+            const counts = cards.map(c => c.count);
+            localStorage.setItem('ddz_paiCount', JSON.stringify(counts));
+        }
+
+        function loadCards() {
+            const saved = localStorage.getItem('ddz_paiCount');
+            if (saved) {
+                const counts = JSON.parse(saved);
+                counts.forEach((c, i) => {
+                    if (cards[i]) cards[i].count = c;
+                });
+            }
+        }
+
+        // 重置
+        function resetAll() {
+            if(confirm('确定重置所有牌吗？')) {
+                cards = JSON.parse(JSON.stringify(initialCards));
+                saveCards();
+                render();
+            }
+        }
+
+        // 首次加载
+        window.onload = function() {
+            loadCards();
+            render();
+        };
+    </script>
+</body>
+</html>
