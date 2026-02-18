@@ -194,6 +194,18 @@ const tags = {
       "badgeColor": "Y",
       "status": "active",
       "updateTime": "2026-01-06"
+    },
+    {
+      "id": "paiCounter",
+      "href": "./pS/index.html",
+      "icon": "🍰",
+      "title": "牌局计数器",
+      "desc": "记录和管理斗地主牌局的分数，支持多局统计",
+      "tags": ["工具"],
+      "badge": "INTERESTING",
+      "badgeColor": "Y",
+      "status": "active",
+      "updateTime": "2026-01-06"
     }
   ],
   "settings": {
