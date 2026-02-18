@@ -90,7 +90,12 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 1.8rem;
             font-weight: bold;
+            cursor: pointer;
+            padding: 2px 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
         }
+        .player-score:active { background: #f0f0f0; }
         
         .player-score.positive { color: var(--danger-color); }
         .player-score.negative { color: var(--success-color); }
@@ -244,6 +249,181 @@
         }
         .nav-btn:active { transform: scale(0.95); }
 
+        /* 自定义分数切换 */
+        .score-mode-toggle {
+            display: flex;
+            background: #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+        .score-mode-toggle button {
+            flex: 1;
+            padding: 10px 0;
+            border-radius: 0;
+            font-size: 0.9rem;
+            background: transparent;
+            color: #888;
+            box-shadow: none;
+        }
+        .score-mode-toggle button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .custom-score-row {
+            display: none;
+            margin-bottom: 18px;
+        }
+        .custom-score-row.show { display: flex; }
+        .formula-rows { display: block; }
+        .formula-rows.hide { display: none; }
+
+        /* 历史记录区域 */
+        .history-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px 18px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .history-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        .history-item:last-child { border-bottom: none; }
+
+        .history-left {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .history-time {
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        .history-desc {
+            color: var(--text-color);
+        }
+
+        .history-deltas {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        .history-deltas .h-pos { color: var(--danger-color); }
+        .history-deltas .h-neg { color: var(--success-color); }
+
+        .btn-undo {
+            background: #fff3e0;
+            color: #e67e22;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-undo:active { background: #ffe0b2; }
+
+        .history-empty {
+            text-align: center;
+            color: #bbb;
+            font-size: 0.85rem;
+            padding: 15px 0;
+        }
+
+        /* 分数编辑弹窗 */
+        .score-edit-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 300;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .score-edit-overlay.show { display: flex; }
+
+        .score-edit-dialog {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 280px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .score-edit-dialog .dialog-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 18px;
+        }
+
+        .score-edit-dialog input {
+            width: 120px;
+            padding: 12px;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
+        }
+
+        .score-edit-btns {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .score-edit-btns button {
+            flex: 1;
+            padding: 12px 0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .btn-dialog-cancel {
+            background: #eee;
+            color: #888;
+        }
+
+        .btn-dialog-ok {
+            background: var(--primary-color);
+            color: white;
+        }
+
         /* 提示信息 */
         .toast {
             position: fixed;
@@ -274,7 +454,7 @@
                 <span class="player-name" contenteditable="true" onblur="saveNames()">玩家 A</span>
                 <span style="font-size: 0.8rem; color: #999;">点击设为地主</span>
             </div>
-            <div class="player-score" id="score0">0</div>
+            <div class="player-score" id="score0" onclick="openScoreEdit(0, event)">0</div>
         </div>
 
         <div class="player-card" onclick="selectLandlord(1)" id="p1">
@@ -283,7 +463,7 @@
                 <span class="player-name" contenteditable="true" onblur="saveNames()">玩家 B</span>
                 <span style="font-size: 0.8rem; color: #999;">点击设为地主</span>
             </div>
-            <div class="player-score" id="score1">0</div>
+            <div class="player-score" id="score1" onclick="openScoreEdit(1, event)">0</div>
         </div>
 
         <div class="player-card" onclick="selectLandlord(2)" id="p2">
@@ -292,28 +472,43 @@
                 <span class="player-name" contenteditable="true" onblur="saveNames()">玩家 C</span>
                 <span style="font-size: 0.8rem; color: #999;">点击设为地主</span>
             </div>
-            <div class="player-score" id="score2">0</div>
+            <div class="player-score" id="score2" onclick="openScoreEdit(2, event)">0</div>
         </div>
     </div>
 
     <div class="controls">
-        <div class="setting-row">
-            <div>
-                <div class="setting-label">炸弹/倍数 (n)</div>
-                <div class="calc-display">计算公式: 底分 × 2ⁿ</div>
-            </div>
-            <div class="n-control">
-                <span class="n-value" id="multiplierN">0</span>
-                <div class="n-btn-group">
-                    <button class="n-btn n-btn-minus" onclick="changeN(-1)">−</button>
-                    <button class="n-btn n-btn-plus" onclick="changeN(1)">＋</button>
+        <!-- 分数模式切换 -->
+        <div class="score-mode-toggle">
+            <button class="active" id="modeFormula" onclick="switchMode('formula')">公式计算</button>
+            <button id="modeCustom" onclick="switchMode('custom')">自定义分数</button>
+        </div>
+
+        <!-- 公式模式 -->
+        <div class="formula-rows" id="formulaRows">
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">炸弹/倍数 (n)</div>
+                    <div class="calc-display">计算公式: 底分 × 2ⁿ</div>
                 </div>
+                <div class="n-control">
+                    <span class="n-value" id="multiplierN">0</span>
+                    <div class="n-btn-group">
+                        <button class="n-btn n-btn-minus" onclick="changeN(-1)">−</button>
+                        <button class="n-btn n-btn-plus" onclick="changeN(1)">＋</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-label">底分</div>
+                <input type="number" id="baseScore" value="1" min="1" oninput="updatePreview(); saveState()">
             </div>
         </div>
 
-        <div class="setting-row">
-            <div class="setting-label">底分</div>
-            <input type="number" id="baseScore" value="1" min="1" oninput="updatePreview()">
+        <!-- 自定义分数模式 -->
+        <div class="custom-score-row setting-row" id="customRow">
+            <div class="setting-label">自定义每农民分数</div>
+            <input type="number" id="customScore" value="1" min="1" oninput="updatePreview(); saveState()">
         </div>
         
         <div style="text-align: center; margin-bottom: 15px; color: #666; font-size: 0.9rem;">
@@ -326,8 +521,30 @@
         </div>
     </div>
 
+    <!-- 历史记录 -->
+    <div class="history-section">
+        <div class="history-title">
+            <span>📋 最近记录</span>
+        </div>
+        <ul class="history-list" id="historyList">
+            <li class="history-empty">暂无记录</li>
+        </ul>
+    </div>
+
     <div class="reset-section">
         <button class="btn-reset" onclick="resetGame()">重置所有分数</button>
+    </div>
+
+    <!-- 分数编辑弹窗 -->
+    <div class="score-edit-overlay" id="scoreEditOverlay" onclick="closeScoreEdit(event)">
+        <div class="score-edit-dialog" onclick="event.stopPropagation()">
+            <div class="dialog-title" id="scoreEditTitle">修改分数</div>
+            <input type="number" id="scoreEditInput" onkeydown="if(event.key==='Enter') confirmScoreEdit()">
+            <div class="score-edit-btns">
+                <button class="btn-dialog-cancel" onclick="closeScoreEdit()">取消</button>
+                <button class="btn-dialog-ok" onclick="confirmScoreEdit()">确定</button>
+            </div>
+        </div>
     </div>
 
     <div id="toast" class="toast">请先选择谁是地主</div>
@@ -336,21 +553,34 @@
         // 游戏状态
         let state = {
             scores: [0, 0, 0],
-            landlordIdx: -1 // -1 表示未选择
+            landlordIdx: -1
         };
+
+        let scoreMode = 'formula'; // 'formula' | 'custom'
+        let history = []; // 最多5条 { time, desc, deltas, prevScores }
 
         // 初始化
         window.onload = function() {
             loadState();
+            loadHistory();
             renderScores();
+            renderHistory();
             updatePreview();
         };
+
+        // 分数模式切换
+        function switchMode(mode) {
+            scoreMode = mode;
+            document.getElementById('modeFormula').classList.toggle('active', mode === 'formula');
+            document.getElementById('modeCustom').classList.toggle('active', mode === 'custom');
+            document.getElementById('formulaRows').classList.toggle('hide', mode === 'custom');
+            document.getElementById('customRow').classList.toggle('show', mode === 'custom');
+            updatePreview();
+        }
 
         // 选中地主
         function selectLandlord(index) {
             state.landlordIdx = index;
-            
-            // 更新UI样式
             document.querySelectorAll('.player-card').forEach((card, i) => {
                 if (i === index) {
                     card.classList.add('is-landlord');
@@ -362,9 +592,14 @@
 
         // 更新预览分数
         function updatePreview() {
-            const n = parseInt(document.getElementById('multiplierN').innerText) || 0;
-            const base = parseInt(document.getElementById('baseScore').value) || 1;
-            const total = base * Math.pow(2, n);
+            let total;
+            if (scoreMode === 'custom') {
+                total = parseInt(document.getElementById('customScore').value) || 1;
+            } else {
+                const n = parseInt(document.getElementById('multiplierN').innerText) || 0;
+                const base = parseInt(document.getElementById('baseScore').value) || 1;
+                total = base * Math.pow(2, n);
+            }
             document.getElementById('previewScore').innerText = total;
             return total;
         }
@@ -376,6 +611,14 @@
             n = Math.max(0, n + delta);
             el.innerText = n;
             updatePreview();
+            saveState();
+        }
+
+        // 获取玩家名称
+        function getPlayerNames() {
+            const names = [];
+            document.querySelectorAll('.player-name').forEach(el => names.push(el.innerText));
+            return names;
         }
 
         // 结算逻辑
@@ -385,38 +628,99 @@
                 return;
             }
 
-            const basePoints = updatePreview(); // 单个农民的输赢分
-            
-            // 地主的输赢是农民的两倍 (因为是一对二)
-            // 公式：地主分数变动 = ± (2 * basePoints)
-            //      农民分数变动 = ∓ basePoints
-            
+            const basePoints = updatePreview();
             const landlordDelta = 2 * basePoints;
             const peasantDelta = basePoints;
 
-            const scores = state.scores;
+            const prevScores = [...state.scores];
             const ldIdx = state.landlordIdx;
+            const names = getPlayerNames();
+
+            const deltas = [0, 0, 0];
 
             if (isLandlordWin) {
-                // 地主赢
-                scores[ldIdx] += landlordDelta;
+                deltas[ldIdx] = landlordDelta;
                 for (let i = 0; i < 3; i++) {
-                    if (i !== ldIdx) scores[i] -= peasantDelta;
+                    if (i !== ldIdx) deltas[i] = -peasantDelta;
                 }
             } else {
-                // 地主输
-                scores[ldIdx] -= landlordDelta;
+                deltas[ldIdx] = -landlordDelta;
                 for (let i = 0; i < 3; i++) {
-                    if (i !== ldIdx) scores[i] += peasantDelta;
+                    if (i !== ldIdx) deltas[i] = peasantDelta;
                 }
             }
 
+            // 应用分数
+            for (let i = 0; i < 3; i++) {
+                state.scores[i] += deltas[i];
+            }
+
+            // 生成时间
+            const now = new Date();
+            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+            // 生成描述
+            const desc = `${names[ldIdx]}(地主) ${isLandlordWin ? '赢' : '输'} | 分值 ${basePoints}`;
+
+            // 写入历史
+            history.unshift({
+                time: timeStr,
+                desc: desc,
+                deltas: deltas,
+                prevScores: prevScores,
+                names: names
+            });
+            if (history.length > 5) history.pop();
+
             renderScores();
+            renderHistory();
             saveState();
-            
-            // 重置倍数，方便下一局（可选，根据习惯保留也行，这里选择保留）
-            // document.getElementById('multiplierN').value = 0;
+            saveHistory();
+
             showToast("分数已更新");
+        }
+
+        // 回退
+        function undoHistory(index) {
+            const record = history[index];
+            if (!record) return;
+            // 恢复到该条记录之前的分数
+            state.scores = [...record.prevScores];
+            // 移除该条及之前的所有记录（index 0 是最新的）
+            history.splice(0, index + 1);
+
+            renderScores();
+            renderHistory();
+            saveState();
+            saveHistory();
+            showToast("已回退");
+        }
+
+        // 渲染历史记录
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            if (history.length === 0) {
+                list.innerHTML = '<li class="history-empty">暂无记录</li>';
+                return;
+            }
+            const names = getPlayerNames();
+            list.innerHTML = history.map((h, idx) => {
+                const deltasHtml = h.deltas.map((d, i) => {
+                    const name = (h.names && h.names[i]) || names[i];
+                    const cls = d > 0 ? 'h-pos' : (d < 0 ? 'h-neg' : '');
+                    const prefix = d > 0 ? '+' : '';
+                    return `<span class="${cls}">${name} ${prefix}${d}</span>`;
+                }).join('');
+                return `
+                    <li class="history-item">
+                        <div class="history-left">
+                            <span class="history-time">${h.time}</span>
+                            <span class="history-desc">${h.desc}</span>
+                            <div class="history-deltas">${deltasHtml}</div>
+                        </div>
+                        <button class="btn-undo" onclick="undoHistory(${idx})">↩ 回退</button>
+                    </li>`;
+            }).join('');
         }
 
         // 渲染分数到DOM
@@ -425,66 +729,115 @@
                 const el = document.getElementById(`score${i}`);
                 const s = state.scores[i];
                 el.innerText = s > 0 ? `+${s}` : s;
-                
-                // 颜色处理
                 el.className = 'player-score';
                 if (s > 0) el.classList.add('positive');
                 if (s < 0) el.classList.add('negative');
             }
         }
 
-        // 保存名字逻辑
+        // 保存名字
         function saveNames() {
             const names = [];
-            document.querySelectorAll('.player-name').forEach(el => {
-                names.push(el.innerText);
-            });
+            document.querySelectorAll('.player-name').forEach(el => names.push(el.innerText));
             localStorage.setItem('ddz_names', JSON.stringify(names));
         }
 
-        // 存储/读取逻辑 (使用localStorage防止刷新丢失)
+        // 存储/读取
         function saveState() {
             localStorage.setItem('ddz_scores', JSON.stringify(state.scores));
+            localStorage.setItem('ddz_baseScore', document.getElementById('baseScore').value);
+            localStorage.setItem('ddz_customScore', document.getElementById('customScore').value);
+            localStorage.setItem('ddz_multiplierN', document.getElementById('multiplierN').innerText);
+            localStorage.setItem('ddz_scoreMode', scoreMode);
         }
 
         function loadState() {
-            // 加载分数
             const savedScores = localStorage.getItem('ddz_scores');
-            if (savedScores) {
-                state.scores = JSON.parse(savedScores);
-            }
-            
-            // 加载名字
+            if (savedScores) state.scores = JSON.parse(savedScores);
+
             const savedNames = localStorage.getItem('ddz_names');
             if (savedNames) {
                 const names = JSON.parse(savedNames);
                 const nameEls = document.querySelectorAll('.player-name');
-                names.forEach((name, i) => {
-                    if (nameEls[i]) nameEls[i].innerText = name;
-                });
+                names.forEach((name, i) => { if (nameEls[i]) nameEls[i].innerText = name; });
             }
+
+            const savedBase = localStorage.getItem('ddz_baseScore');
+            if (savedBase) document.getElementById('baseScore').value = savedBase;
+
+            const savedCustom = localStorage.getItem('ddz_customScore');
+            if (savedCustom) document.getElementById('customScore').value = savedCustom;
+
+            const savedN = localStorage.getItem('ddz_multiplierN');
+            if (savedN) document.getElementById('multiplierN').innerText = savedN;
+
+            const savedMode = localStorage.getItem('ddz_scoreMode');
+            if (savedMode) switchMode(savedMode);
+        }
+
+        function saveHistory() {
+            localStorage.setItem('ddz_history', JSON.stringify(history));
+        }
+
+        function loadHistory() {
+            const saved = localStorage.getItem('ddz_history');
+            if (saved) history = JSON.parse(saved);
         }
 
         function resetGame() {
-            if (confirm("确定要清零所有分数吗？")) {
+            if (confirm("确定要清零所有分数和历史记录吗？")) {
                 state.scores = [0, 0, 0];
                 state.landlordIdx = -1;
+                history = [];
                 document.querySelectorAll('.player-card').forEach(c => c.classList.remove('is-landlord'));
                 document.getElementById('multiplierN').innerText = '0';
                 renderScores();
+                renderHistory();
                 saveState();
+                saveHistory();
                 updatePreview();
             }
         }
 
-        // 简单的提示框
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.innerText = msg;
             t.style.opacity = 1;
-            setTimeout(() => {
-                t.style.opacity = 0;
-            }, 2000);
+            setTimeout(() => { t.style.opacity = 0; }, 2000);
+        }
+
+        // 分数编辑
+        let editingPlayerIdx = -1;
+
+        function openScoreEdit(index, e) {
+            e.stopPropagation(); // 阻止触发 selectLandlord
+            editingPlayerIdx = index;
+            const names = getPlayerNames();
+            document.getElementById('scoreEditTitle').innerText = `修改 ${names[index]} 的分数`;
+            document.getElementById('scoreEditInput').value = state.scores[index];
+            document.getElementById('scoreEditOverlay').classList.add('show');
+            setTimeout(() => document.getElementById('scoreEditInput').focus(), 100);
+        }
+
+        function closeScoreEdit(e) {
+            if (e && e.target !== document.getElementById('scoreEditOverlay')) return;
+            document.getElementById('scoreEditOverlay').classList.remove('show');
+            editingPlayerIdx = -1;
+        }
+
+        function confirmScoreEdit() {
+            if (editingPlayerIdx === -1) return;
+            const val = parseInt(document.getElementById('scoreEditInput').value);
+            if (isNaN(val)) {
+                showToast("请输入有效数字");
+                return;
+            }
+            state.scores[editingPlayerIdx] = val;
+            renderScores();
+            saveState();
+            document.getElementById('scoreEditOverlay').classList.remove('show');
+            showToast("分数已修改");
+            editingPlayerIdx = -1;
         }
     </script>
 </body>
