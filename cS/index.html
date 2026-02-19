@@ -426,6 +426,111 @@
             color: white;
         }
 
+        /* 结算确认浮窗 */
+        .settle-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 300;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .settle-overlay.show { display: flex; }
+
+        .settle-dialog {
+            background: white;
+            border-radius: 15px;
+            padding: 22px 20px;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .settle-dialog-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .settle-info {
+            background: var(--bg-color);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+        }
+
+        .settle-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 0.88rem;
+            color: #555;
+        }
+
+        .settle-info-row .label {
+            color: #888;
+        }
+
+        .settle-info-row .value {
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .settle-deltas {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .settle-delta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .settle-delta-row .player-tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .settle-delta-row .landlord-badge {
+            font-size: 0.65rem;
+            background: var(--danger-color);
+            color: white;
+            padding: 1px 5px;
+            border-radius: 6px;
+        }
+
+        .settle-delta-row .delta-val {
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+        }
+
+        .settle-delta-row .delta-val.pos { color: var(--danger-color); }
+        .settle-delta-row .delta-val.neg { color: var(--success-color); }
+
+        .settle-btns {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .settle-btns button {
+            flex: 1;
+            padding: 12px 0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
         /* 提示信息 */
         .toast {
             position: fixed;
@@ -773,6 +878,18 @@
         </div>
     </div>
 
+    <!-- 结算确认浮窗 -->
+    <div class="settle-overlay" id="settleOverlay" onclick="cancelSettle(event)">
+        <div class="settle-dialog" onclick="event.stopPropagation()">
+            <div class="settle-dialog-title" id="settleDialogTitle">结算确认</div>
+            <div class="settle-info" id="settleInfo"></div>
+            <div class="settle-btns">
+                <button class="btn-dialog-cancel" onclick="cancelSettle()">取消</button>
+                <button class="btn-dialog-ok" onclick="confirmSettle()">确认结算</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast" class="toast">请先选择谁是地主</div>
 
     <script>
@@ -849,7 +966,10 @@
             return names;
         }
 
-        // 结算逻辑
+        // 暂存待确认的结算数据
+        let pendingSettle = null;
+
+        // 结算逻辑 - 先弹出确认浮窗
         function settle(isLandlordWin) {
             if (state.landlordIdx === -1) {
                 showToast("请先点击上方卡片选择本局地主");
@@ -878,11 +998,6 @@
                 }
             }
 
-            // 应用分数
-            for (let i = 0; i < 3; i++) {
-                state.scores[i] += deltas[i];
-            }
-
             // 生成时间（包含日期）
             const now = new Date();
             const timeStr = (now.getMonth() + 1) + '/' + now.getDate() + ' ' +
@@ -890,6 +1005,57 @@
 
             // 生成描述
             const desc = `${names[ldIdx]}(地主) ${isLandlordWin ? '赢' : '输'} | 分值 ${basePoints}`;
+
+            // 暂存结算数据
+            pendingSettle = {
+                deltas, prevScores, ldIdx, names, timeStr, desc, isLandlordWin, basePoints
+            };
+
+            // 渲染确认浮窗
+            const titleText = isLandlordWin ? '🎉 地主赢了' : '😢 地主输了';
+            document.getElementById('settleDialogTitle').innerText = titleText;
+
+            let infoHtml = `
+                <div class="settle-info-row">
+                    <span class="label">地主</span>
+                    <span class="value">${names[ldIdx]}</span>
+                </div>
+                <div class="settle-info-row">
+                    <span class="label">结算分值</span>
+                    <span class="value">${basePoints}</span>
+                </div>
+                <div class="settle-info-row">
+                    <span class="label">时间</span>
+                    <span class="value">${timeStr}</span>
+                </div>
+                <div class="settle-deltas">
+            `;
+            for (let i = 0; i < 3; i++) {
+                const d = deltas[i];
+                const cls = d > 0 ? 'pos' : (d < 0 ? 'neg' : '');
+                const prefix = d > 0 ? '+' : '';
+                const badge = i === ldIdx ? '<span class="landlord-badge">地主</span>' : '';
+                infoHtml += `
+                    <div class="settle-delta-row">
+                        <span class="player-tag">${names[i]} ${badge}</span>
+                        <span class="delta-val ${cls}">${prefix}${d}</span>
+                    </div>`;
+            }
+            infoHtml += '</div>';
+
+            document.getElementById('settleInfo').innerHTML = infoHtml;
+            document.getElementById('settleOverlay').classList.add('show');
+        }
+
+        // 确认结算
+        function confirmSettle() {
+            if (!pendingSettle) return;
+            const { deltas, prevScores, ldIdx, names, timeStr, desc } = pendingSettle;
+
+            // 应用分数
+            for (let i = 0; i < 3; i++) {
+                state.scores[i] += deltas[i];
+            }
 
             // 写入历史
             history.unshift({
@@ -899,7 +1065,10 @@
                 prevScores: prevScores,
                 names: names
             });
-            // 历史记录不限制条数
+
+            // 清除地主选中状态
+            state.landlordIdx = -1;
+            document.querySelectorAll('.player-card').forEach(c => c.classList.remove('is-landlord'));
 
             renderScores();
             renderHistory();
@@ -908,7 +1077,18 @@
             saveState();
             saveHistory();
 
+            // 关闭浮窗
+            document.getElementById('settleOverlay').classList.remove('show');
+            pendingSettle = null;
+
             showToast("分数已更新");
+        }
+
+        // 取消结算
+        function cancelSettle(e) {
+            if (e && e.target && e.target !== document.getElementById('settleOverlay')) return;
+            document.getElementById('settleOverlay').classList.remove('show');
+            pendingSettle = null;
         }
 
         // 回退
