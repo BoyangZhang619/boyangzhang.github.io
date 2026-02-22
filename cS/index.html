@@ -128,7 +128,6 @@
             border-radius: 8px;
             font-size: 1.2rem;
             text-align: center;
-            -moz-appearance: textfield;
         }
 
         .calc-display {
@@ -199,7 +198,6 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            active: scale(0.98);
             transition: transform 0.1s;
         }
 
@@ -704,6 +702,42 @@
         }
         .btn-save-chart:active { opacity: 0.85; }
 
+        .chart-scale-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            background: var(--bg-color);
+            border-radius: 10px;
+            padding: 10px 14px;
+        }
+
+        .chart-scale-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .chart-scale-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-scale-control .n-btn {
+            width: 34px;
+            height: 34px;
+            font-size: 1.1rem;
+        }
+
+        .chart-scale-val {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            min-width: 36px;
+            text-align: center;
+        }
+
         .chart-container {
             width: 100%;
             overflow-x: auto;
@@ -846,6 +880,14 @@
             <span class="chart-title">📈 积分走势</span>
             <button class="btn-save-chart" onclick="saveChart()">💾 保存图片</button>
         </div>
+        <div class="chart-scale-row">
+            <span class="chart-scale-label">横向缩放</span>
+            <div class="chart-scale-control">
+                <button class="n-btn n-btn-minus" onclick="changeChartScale(-0.5)">−</button>
+                <span class="chart-scale-val" id="chartScaleVal">1x</span>
+                <button class="n-btn n-btn-plus" onclick="changeChartScale(0.5)">＋</button>
+            </div>
+        </div>
         <div class="chart-container" id="chartContainer">
             <canvas id="scoreChart"></canvas>
         </div>
@@ -901,6 +943,7 @@
 
         let scoreMode = 'formula'; // 'formula' | 'custom'
         let history = []; // 最多5条 { time, desc, deltas, prevScores }
+        let chartScale = 1; // 图表横向缩放倍数
 
         // 初始化
         window.onload = function() {
@@ -912,6 +955,13 @@
             renderChart();
             updatePreview();
         };
+
+        // 窗口大小变化时自动重绘图表
+        let resizeTimer = null;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(renderChart, 200);
+        });
 
         // 分数模式切换
         function switchMode(mode) {
@@ -957,6 +1007,14 @@
             el.innerText = n;
             updatePreview();
             saveState();
+        }
+
+        // 调整图表缩放比例
+        function changeChartScale(delta) {
+            chartScale = Math.max(0.5, Math.round((chartScale + delta) * 10) / 10);
+            document.getElementById('chartScaleVal').innerText = chartScale + 'x';
+            localStorage.setItem('ddz_chartScale', chartScale);
+            renderChart();
         }
 
         // 获取玩家名称
@@ -1186,6 +1244,12 @@
 
             const savedMode = localStorage.getItem('ddz_scoreMode');
             if (savedMode) switchMode(savedMode);
+
+            const savedChartScale = localStorage.getItem('ddz_chartScale');
+            if (savedChartScale) {
+                chartScale = parseFloat(savedChartScale) || 1;
+                document.getElementById('chartScaleVal').innerText = chartScale + 'x';
+            }
         }
 
         function saveHistory() {
@@ -1462,7 +1526,11 @@
             const padTop = 20;
             const padBottom = 45;
             const minPointSpacing = 50;
-            const chartWidth = Math.max(container.clientWidth, padLeft + padRight + (pointCount - 1) * minPointSpacing);
+            // 先将 canvas 宽度清零，让容器回到自然宽度
+            canvas.style.width = '0px';
+            const sectionWidth = container.clientWidth;
+            // 图表宽度 = 容器宽度 × 缩放倍数
+            const chartWidth = Math.max(sectionWidth * chartScale, padLeft + padRight + 20);
             const chartHeight = 220;
 
             canvas.width = chartWidth * dpr;
