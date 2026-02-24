@@ -27,6 +27,19 @@ const tags = {
       "updateTime": "2026-01-02"
     },
     {
+      "id": "study-log",
+      "href": "https://done.zbyblq.xin",
+      "icon": "📚",
+      "title": "学习日志",
+      "desc": "记录你的学习过程",
+      "tags": ["工具"],
+      "badge": "NEW",
+      "badgeColor": "P",
+      "status": "active",
+      "createTime": "2026-01-01",
+      "updateTime": "2026-01-02"
+    },
+    {
       "id": "cny-blessing",
       "href": "https://greeting.zbyblq.xin",
       "icon": "🧧",
