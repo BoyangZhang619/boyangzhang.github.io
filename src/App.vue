@@ -1,15 +1,36 @@
 <script setup lang="ts">
-// import * as dataExtraction from './data_extraction/base.ts';
-// import { ref } from 'vue';
+import AppShell from '@/components/layout/AppShell.vue'
+import { useNavData } from '@/composables/useNavData'
+import { useSectionNavigator } from '@/composables/useSectionNavigator'
 
-// const userDevice = ref(dataExtraction.getDeviceType());
-// const webpageOpenTime = ref(dataExtraction.getWebpageOpenTime());
-// const allCookiesNames = ref(dataExtraction.getAllCookiesNames());
-// const allCookiesValues = ref(dataExtraction.getAllCookiesValues());
-// const allLocalStorageKeys = ref(dataExtraction.getAllLocalStorageKeys());
+const {
+  site,
+  profile,
+  navigation,
+  hero,
+  footer,
+  settings,
+  sections,
+  categories,
+  heroQuickNavSections,
+  stats
+} = useNavData()
 
-
-
+const navigator = useSectionNavigator(() => sections.value)
 </script>
+
 <template>
+  <AppShell
+    :site="site"
+    :profile="profile"
+    :navigation="navigation"
+    :hero="hero"
+    :footer="footer"
+    :settings="settings"
+    :sections="sections"
+    :categories="categories"
+    :hero-quick-nav-sections="heroQuickNavSections"
+    :stats="stats"
+    :navigator="navigator"
+  />
 </template>

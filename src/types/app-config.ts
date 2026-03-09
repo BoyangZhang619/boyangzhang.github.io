@@ -1,9 +1,9 @@
+import type { SiteConfig, ProfileConfig, HeroConfig, FooterConfig, CategoryConfig } from './site'
 import type { NavigationConfig } from './navigation'
 import type { NavItem } from './item'
 import type { AppSettings } from './settings'
 import type { ThemePresetMap } from './theme'
 import type { SectionPresetMap } from './section'
-import type { SiteConfig, ProfileConfig, HeroConfig, FooterConfig, CategoryConfig } from './site'
 
 export interface BadgePreset {
   bg: string
