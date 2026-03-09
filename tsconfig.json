@@ -1,26 +1,7 @@
 {
   "files": [],
   "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
-  "compilerOptions": {
-    "target": "es2017",
-    "lib": [
-      "ES2017", // 包含 Set, Map, Promise 等基础类型定义
-      "DOM", // 包含 window, document 等浏览器环境定义
-      "DOM.Iterable" // 让你可以对 NodeList 等进行迭代
-    ],
-    "module": "esnext",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    }
-  }
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }
