@@ -20,12 +20,8 @@ import SearchPanel from '@/components/search/SearchPanel.vue'
 
 const drawerOpen = ref(false)
 
-function openDrawer() {
-  drawerOpen.value = true
-}
-
-function closeDrawer() {
-  drawerOpen.value = false
+function switchDrawer() {
+  drawerOpen.value = !drawerOpen.value
 }
 
 const { toggleTheme } = useTheme()
@@ -162,20 +158,17 @@ watch(
   },
   { deep: true }
 )
+
+setInterval(() => {
+  // console.log(drawerOpen.value, searchOpen.value)
+}, 5000);
 </script>
 
 <template>
   <div class="app-shell">
-    <TopBar
-  :site="site"
-  :config="navigation.topbar"
-  :active-section-id="navigator.activeSectionId.value"
-  @go-home="navigator.goToHeader"
-  @open-drawer="openDrawer"
-  @open-search="openSearch"
-  @toggle-theme="toggleTheme"
-  @random-jump="handleRandomJump"
-/>
+    <TopBar :site="site" :config="navigation.topbar" :active-section-id="navigator.activeSectionId.value"
+      @go-home="navigator.goToHeader" @open-drawer="switchDrawer" @open-search="openSearch" @toggle-theme="toggleTheme"
+      @random-jump="handleRandomJump" />
 
     <!-- <SideBar
       :config="navigation.sidebar"
@@ -185,17 +178,17 @@ watch(
       @jump="navigator.goToSection"
     /> -->
 
-    <RightDrawer :config="navigation.drawer" :profile="profile" :stats="stats" :settings="settings" />
+    <RightDrawer :config="navigation.drawer" :profile="profile" :stats="stats" :settings="settings" :open="drawerOpen" @close="drawerOpen = false" />
     <SearchPanel :open="searchOpen" :query="searchQuery" :results="searchResults" @close="closeSearch"
       @jump="handleSearchJump" @update:query="searchQuery = $event" />
     <main class="app-shell__main">
       <HeaderSection :site="site" :hero="hero" :stats="stats" :quick-nav-sections="heroQuickNavSections"
-        @jump="navigator.goToSection" @go-body="() => sections[0] && navigator.goToSection(sections[0].id)" />
+        @jump="navigator.goToSection" @go-body="() => sections[0] && navigator.goToSection(sections[0].id)" @random-jump="handleRandomJump" />
 
       <BodySectionList :sections="sections" @jump="navigator.goToSection" @next="navigator.goNext"
         @previous="navigator.goPrevious" />
 
-      <FooterSection :footer="footer" @go-top="navigator.goToHeader" />
+      <FooterSection :footer="footer" @go-top="navigator.goToHeader" @random-jump="handleRandomJump" />
     </main>
   </div>
 </template>

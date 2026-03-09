@@ -4,6 +4,7 @@ import type { FooterConfig } from '@/types/site'
 
 const emit = defineEmits<{
   (e: 'go-top'): void
+  (e: 'random-jump'): void
 }>()
 
 defineProps({
@@ -33,7 +34,7 @@ defineProps({
             回到顶部
           </button>
 
-          <button class="footer-section__secondary" type="button">
+          <button class="footer-section__secondary" type="button" @click="emit('random-jump')">
             随机探索
           </button>
         </div>

@@ -6,6 +6,7 @@ import type { SectionViewModel } from '@/types/view-model'
 const emit = defineEmits<{
   (e: 'jump', id: string): void
   (e: 'go-body'): void
+  (e: 'random-jump'): void
 }>()
 
 defineProps({
@@ -55,7 +56,7 @@ defineProps({
             {{ hero.primaryAction?.label || '开始探索' }}
           </button>
 
-          <button class="header-section__secondary" type="button">
+          <button class="header-section__secondary" type="button" @click="emit('random-jump')">
             {{ hero.secondaryAction?.label || '随机看看' }}
           </button>
         </div>

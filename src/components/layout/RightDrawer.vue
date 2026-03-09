@@ -147,6 +147,11 @@ const drawerStyle = computed(() => ({
 </template>
 
 <style scoped lang="scss">
+
+template {
+  z-index: 999;
+}
+
 .right-drawer__mask {
   position: fixed;
   inset: 0;

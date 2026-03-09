@@ -56,7 +56,9 @@ const logoText = computed(() => {
           ? emit('toggle-theme')
           : action === 'random-jump'
             ? emit('random-jump')
-            : null
+            : action === 'open-drawer'
+              ? emit('open-drawer')
+              : null
         ">
         <span v-if="action === 'theme-toggle'">◐</span>
         <span v-else-if="action === 'random-jump'">✦</span>

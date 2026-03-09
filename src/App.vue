@@ -21,6 +21,7 @@ const navigator = useSectionNavigator(() => sections.value)
 
 <template>
   <AppShell
+    v-if="site && profile && navigation && hero && footer && settings"
     :site="site"
     :profile="profile"
     :navigation="navigation"
