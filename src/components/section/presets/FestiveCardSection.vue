@@ -195,4 +195,43 @@ defineProps({
     cursor: not-allowed;
   }
 }
+@media (max-width: 1200px) {
+  .showcase,
+  .tool,
+  .algo {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .showcase__title,
+  .tool__title,
+  .algo__title,
+  .audio__title,
+  .festive-card__title,
+  .disabled-card__title {
+    font-size: clamp(28px, 8vw, 42px);
+  }
+
+  .showcase__desc,
+  .tool__desc,
+  .algo__desc,
+  .audio__desc,
+  .festive-card__desc,
+  .disabled-card__desc {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .preview-card,
+  .workbench,
+  .graph-board,
+  .wave-card,
+  .festive-card,
+  .disabled-card {
+    border-radius: 22px;
+    padding: 18px;
+  }
+}
 </style>

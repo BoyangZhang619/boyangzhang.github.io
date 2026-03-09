@@ -43,7 +43,7 @@ const themeStyle = computed(() => ({
 <style scoped lang="scss">
 .section-shell {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   scroll-snap-align: start;
   overflow: hidden;
   background: var(--section-background);
@@ -61,8 +61,7 @@ const themeStyle = computed(() => ({
   &__inner {
     position: relative;
     z-index: 1;
-    min-height: 100vh;
-    padding: 96px 48px 48px;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
   }

@@ -7,6 +7,8 @@ const emit = defineEmits<{
   (e: 'go-home'): void
   (e: 'open-search'): void
   (e: 'open-drawer'): void
+  (e: 'toggle-theme'): void
+  (e: 'random-jump'): void
 }>()
 
 const props = defineProps({
@@ -49,23 +51,19 @@ const logoText = computed(() => {
     </div>
 
     <div class="topbar__right">
-      <button
-        v-for="action in config.quickActions || []"
-        :key="action"
-        class="topbar__action"
-        type="button"
-      >
+      <button v-for="action in config.quickActions || []" :key="action" class="topbar__action" type="button" @click="
+        action === 'theme-toggle'
+          ? emit('toggle-theme')
+          : action === 'random-jump'
+            ? emit('random-jump')
+            : null
+        ">
         <span v-if="action === 'theme-toggle'">◐</span>
         <span v-else-if="action === 'random-jump'">✦</span>
         <span v-else>•</span>
       </button>
 
-      <button
-        v-if="config.showMoreButton"
-        class="topbar__menu"
-        type="button"
-        @click="emit('open-drawer')"
-      >
+      <button v-if="config.showMoreButton" class="topbar__menu" type="button" @click="emit('open-drawer')">
         {{ config.moreButtonIcon }}
       </button>
     </div>

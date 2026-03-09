@@ -7,7 +7,7 @@ export function useSectionNavigator(sectionsSource: () => SectionViewModel[]) {
   const sections = computed(() => sectionsSource())
 
   const allAnchors = computed(() => {
-    return ['header', ...sections.value.map((section: SectionViewModel) => section.anchor), 'footer']
+    return ['header', ...sections.value.map((section) => section.anchor), 'footer']
   })
 
   function setActiveSection(id: string) {
@@ -15,12 +15,14 @@ export function useSectionNavigator(sectionsSource: () => SectionViewModel[]) {
   }
 
   function getSectionIndexById(id: string): number {
-    return allAnchors.value.findIndex((anchor: string) => anchor === id)
+    return allAnchors.value.findIndex((anchor) => anchor === id)
   }
 
   function scrollToElementById(id: string) {
     const el = document.getElementById(id)
     if (!el) return
+
+    activeSectionId.value = id
 
     el.scrollIntoView({
       behavior: 'smooth',
@@ -29,18 +31,15 @@ export function useSectionNavigator(sectionsSource: () => SectionViewModel[]) {
   }
 
   function goToHeader() {
-    setActiveSection('header')
     scrollToElementById('header')
   }
 
   function goToFooter() {
-    setActiveSection('footer')
     scrollToElementById('footer')
   }
 
   function goToSection(id: string) {
     const targetId = id.startsWith('section-') ? id : `section-${id}`
-    setActiveSection(targetId)
     scrollToElementById(targetId)
   }
 
@@ -51,7 +50,6 @@ export function useSectionNavigator(sectionsSource: () => SectionViewModel[]) {
     const nextId = allAnchors.value[currentIndex + 1]
     if (!nextId) return
 
-    setActiveSection(nextId)
     scrollToElementById(nextId)
   }
 
@@ -62,7 +60,6 @@ export function useSectionNavigator(sectionsSource: () => SectionViewModel[]) {
     const prevId = allAnchors.value[currentIndex - 1]
     if (!prevId) return
 
-    setActiveSection(prevId)
     scrollToElementById(prevId)
   }
 

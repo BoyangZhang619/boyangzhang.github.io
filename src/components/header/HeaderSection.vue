@@ -114,9 +114,10 @@ defineProps({
 <style scoped lang="scss">
 .header-section {
   position: relative;
-  min-height: 100vh;
+  max-height: 100dvh;
   scroll-snap-align: start;
   overflow: hidden;
+  padding-top: 0px;
   background:
     radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.18), transparent 28%),
     radial-gradient(circle at 80% 32%, rgba(115, 186, 224, 0.18), transparent 24%),
@@ -138,7 +139,7 @@ defineProps({
     position: relative;
     z-index: 1;
     min-height: 100vh;
-    padding: 120px 72px 80px 120px;
+    padding: 20px 72px 80px 120px;
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
     gap: 36px;

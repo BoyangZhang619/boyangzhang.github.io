@@ -31,6 +31,9 @@ defineProps({
 </template>
 
 <style scoped lang="scss">
+.section-shell {
+  padding: 0px 32px;
+}
 .body-section-list {
   position: relative;
 }
