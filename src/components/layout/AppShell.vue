@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
+import { ref, type PropType } from 'vue'
 import type { SiteConfig, ProfileConfig, HeroConfig, FooterConfig, CategoryConfig } from '@/types/site'
 import type { NavigationConfig } from '@/types/navigation'
 import type { AppSettings } from '@/types/settings'
@@ -11,6 +11,16 @@ import RightDrawer from '@/components/layout/RightDrawer.vue'
 import HeaderSection from '@/components/header/HeaderSection.vue'
 import BodySectionList from '@/components/section/BodySectionList.vue'
 import FooterSection from '@/components/footer/FooterSection.vue'
+
+const drawerOpen = ref(false)
+
+function openDrawer() {
+  drawerOpen.value = true
+}
+
+function closeDrawer() {
+  drawerOpen.value = false
+}
 
 defineProps({
   site: {

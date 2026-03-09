@@ -1,24 +1,34 @@
 import { computed, ref } from 'vue'
 import type { AppDataSchema } from '@/types/app-config'
 import type { SectionViewModel } from '@/types/view-model'
-import navData from '@/data/nav-data'
 import { mapItemsToSections } from '@/utils/mapItemsToSections'
 
+const navData = async () => fetch('/data/nav-data.json').then(res => res.json());
+
 export function useNavData() {
-  const appData = ref<AppDataSchema>(navData as AppDataSchema)
+  const appData = ref<AppDataSchema | null>(null);
+  (async () => {
+    try {
+      const data = await navData()
+      appData.value = data as AppDataSchema
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to load nav-data.json', err)
+    }
+  })()
 
   const sections = computed<SectionViewModel[]>(() => {
-    return mapItemsToSections(appData.value)
+    return appData.value ? mapItemsToSections(appData.value) : []
   })
 
   const featuredSections = computed(() => {
     return sections.value
-      .filter((section: any) => section.flags.featured)
+      .filter((section: any) => section.flags && section.flags.featured)
       .sort((a: any, b: any) => b.priority - a.priority)
   })
 
   const heroQuickNavSections = computed(() => {
-    const quickNav = appData.value.hero.quickNav
+    const quickNav = appData.value?.hero?.quickNav
     if (!quickNav) return []
 
     if (quickNav.source === 'manual' && quickNav.ids?.length) {
@@ -30,8 +40,8 @@ export function useNavData() {
     if (quickNav.source === 'latest') {
       return [...sections.value]
         .sort((a, b) => {
-          const aTime = a.meta.updateTime ? new Date(a.meta.updateTime).getTime() : 0
-          const bTime = b.meta.updateTime ? new Date(b.meta.updateTime).getTime() : 0
+          const aTime = a.meta?.updateTime ? new Date(a.meta.updateTime).getTime() : 0
+          const bTime = b.meta?.updateTime ? new Date(b.meta.updateTime).getTime() : 0
           return bTime - aTime
         })
         .slice(0, quickNav.max)
@@ -40,21 +50,21 @@ export function useNavData() {
     return featuredSections.value.slice(0, quickNav.max)
   })
 
-  const categories = computed(() => appData.value.categories)
+  const categories = computed(() => appData.value?.categories ?? [])
 
-  const site = computed(() => appData.value.site)
-  const profile = computed(() => appData.value.profile)
-  const navigation = computed(() => appData.value.navigation)
-  const hero = computed(() => appData.value.hero)
-  const footer = computed(() => appData.value.footer)
-  const settings = computed(() => appData.value.settings)
+  const site = computed(() => appData.value?.site)
+  const profile = computed(() => appData.value?.profile)
+  const navigation = computed(() => appData.value?.navigation)
+  const hero = computed(() => appData.value?.hero)
+  const footer = computed(() => appData.value?.footer)
+  const settings = computed(() => appData.value?.settings)
 
   const stats = computed(() => {
     const total = sections.value.length
-    const active = sections.value.filter((s: any) => s.meta.status === 'active').length
-    const limited = sections.value.filter((s: any) => s.meta.status === 'limited').length
-    const inactive = sections.value.filter((s: any) => s.meta.status === 'inactive').length
-    const featured = sections.value.filter((s: any) => s.flags.featured).length
+    const active = sections.value.filter((s: any) => s.meta?.status === 'active').length
+    const limited = sections.value.filter((s: any) => s.meta?.status === 'limited').length
+    const inactive = sections.value.filter((s: any) => s.meta?.status === 'inactive').length
+    const featured = sections.value.filter((s: any) => s.flags && s.flags.featured).length
 
     return {
       total,
