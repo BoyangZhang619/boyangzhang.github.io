@@ -1,0 +1,183 @@
+zby-navigation-home/
+├── public/
+│   ├── favicon.ico
+│   ├── images/
+│   │   ├── avatar-default.png
+│   │   ├── hero-cover-placeholder.webp
+│   │   ├── preview/
+│   │   │   ├── little-games.webp
+│   │   │   ├── todolist.webp
+│   │   │   ├── study-log.webp
+│   │   │   ├── cny-blessing.webp
+│   │   │   ├── eft-tool.webp
+│   │   │   ├── encryption-graph.webp
+│   │   │   ├── btree-visual.webp
+│   │   │   ├── piano-keys.webp
+│   │   │   ├── sort-viz.webp
+│   │   │   ├── img2ascii.webp
+│   │   │   ├── drum-pad.webp
+│   │   │   ├── kalimba.webp
+│   │   │   ├── pixelate.webp
+│   │   │   ├── floyd-steinberg.webp
+│   │   │   ├── pathfinding.webp
+│   │   │   └── photo-patina.webp
+│   │   └── patterns/
+│   │       ├── grid.svg
+│   │       ├── dots.svg
+│   │       ├── wave.svg
+│   │       └── noise.png
+│   └── data/
+│       └── nav-data.json
+│
+├── src/
+│   ├── main.ts
+│   ├── App.vue
+│   │
+│   ├── assets/
+│   │   ├── styles/
+│   │   │   ├── index.scss
+│   │   │   ├── reset.scss
+│   │   │   ├── variables.scss
+│   │   │   ├── themes.scss
+│   │   │   ├── layout.scss
+│   │   │   ├── animation.scss
+│   │   │   ├── scrollbar.scss
+│   │   │   └── section-presets.scss
+│   │   └── icons/
+│   │       ├── menu.svg
+│   │       ├── search.svg
+│   │       ├── arrow-down.svg
+│   │       ├── arrow-up.svg
+│   │       ├── random.svg
+│   │       └── theme.svg
+│   │
+│   ├── types/  
+│   │   ├── site.ts
+│   │   ├── navigation.ts
+│   │   ├── item.ts
+│   │   ├── theme.ts
+│   │   ├── section.ts
+│   │   ├── settings.ts
+│   │   └── view-model.ts
+│   │
+│   ├── data/
+│   │   ├── nav-data.ts
+│   │   ├── categories.ts
+│   │   ├── theme-presets.ts
+│   │   └── section-presets.ts
+│   │
+│   ├── constants/
+│   │   ├── app.ts
+│   │   ├── animation.ts
+│   │   ├── navigation.ts
+│   │   └── search.ts
+│   │
+│   ├── utils/
+│   │   ├── mapItemToViewModel.ts
+│   │   ├── mapItemsToSections.ts
+│   │   ├── resolveCategory.ts
+│   │   ├── resolveTheme.ts
+│   │   ├── resolveLayout.ts
+│   │   ├── sortItems.ts
+│   │   ├── filterItems.ts
+│   │   ├── fuzzySearch.ts
+│   │   ├── randomPick.ts
+│   │   ├── date.ts
+│   │   ├── dom.ts
+│   │   └── scroll.ts
+│   │
+│   ├── composables/
+│   │   ├── useAppConfig.ts
+│   │   ├── useNavData.ts
+│   │   ├── useTheme.ts
+│   │   ├── useDrawer.ts
+│   │   ├── useSidebar.ts
+│   │   ├── useSearch.ts
+│   │   ├── useSectionNavigator.ts
+│   │   ├── useActiveSection.ts
+│   │   ├── useScrollSnap.ts
+│   │   ├── useMotion.ts
+│   │   └── useKeyboardShortcuts.ts
+│   │
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── BaseIcon.vue
+│   │   │   ├── BaseButton.vue
+│   │   │   ├── BaseTag.vue
+│   │   │   ├── BaseBadge.vue
+│   │   │   ├── GlassCard.vue
+│   │   │   ├── SectionTitle.vue
+│   │   │   ├── MetaInfo.vue
+│   │   │   ├── EmptyState.vue
+│   │   │   └── LoadingState.vue
+│   │   │
+│   │   ├── layout/
+│   │   │   ├── AppShell.vue
+│   │   │   ├── TopBar.vue
+│   │   │   ├── SideBar.vue
+│   │   │   ├── SideBarCategoryList.vue
+│   │   │   ├── SideBarProgress.vue
+│   │   │   ├── RightDrawer.vue
+│   │   │   ├── FooterBar.vue
+│   │   │   └── ScrollProgress.vue
+│   │   │
+│   │   ├── header/
+│   │   │   ├── HeaderSection.vue
+│   │   │   ├── HeroIntro.vue
+│   │   │   ├── HeroActions.vue
+│   │   │   ├── HeroQuickNav.vue
+│   │   │   ├── HeroStats.vue
+│   │   │   ├── HeroFunPanels.vue
+│   │   │   └── ScrollHint.vue
+│   │   │
+│   │   ├── drawer/
+│   │   │   ├── DrawerProfile.vue
+│   │   │   ├── DrawerStats.vue
+│   │   │   ├── DrawerPreferences.vue
+│   │   │   └── DrawerExplore.vue
+│   │   │
+│   │   ├── search/
+│   │   │   ├── SearchBox.vue
+│   │   │   ├── SearchPanel.vue
+│   │   │   ├── SearchResultList.vue
+│   │   │   └── SearchEmpty.vue
+│   │   │
+│   │   ├── section/
+│   │   │   ├── BodySectionList.vue
+│   │   │   ├── SectionRenderer.vue
+│   │   │   ├── SectionShell.vue
+│   │   │   ├── SectionBackground.vue
+│   │   │   ├── SectionPreview.vue
+│   │   │   ├── SectionFeatureList.vue
+│   │   │   ├── SectionMetaBar.vue
+│   │   │   ├── SectionActions.vue
+│   │   │   ├── SectionNavigator.vue
+│   │   │   └── presets/
+│   │   │       ├── ShowcaseHeroSection.vue
+│   │   │       ├── ToolWorkbenchSection.vue
+│   │   │       ├── AlgoLabSection.vue
+│   │   │       ├── AudioStageSection.vue
+│   │   │       ├── FestiveCardSection.vue
+│   │   │       └── DisabledStateSection.vue
+│   │   │
+│   │   └── footer/
+│   │       ├── FooterSection.vue
+│   │       ├── FooterActions.vue
+│   │       └── FooterLinks.vue
+│   │
+│   ├── store/
+│   │   └── app.store.ts
+│   │
+│   ├── router/
+│   │   └── index.ts
+│   │
+│   └── mocks/
+│       └── preview-data.ts
+│
+├── .gitignore
+├── index.html
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── README.md
+└── eslint.config.js
