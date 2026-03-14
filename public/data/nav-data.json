@@ -1,0 +1,1194 @@
+{
+  "version": "1.0.0",
+  "site": {
+    "id": "zby-home",
+    "title": "A TITLE",
+    "subTitle": "A SUBTITLE",
+    "logo": {
+      "emoji": "🧭",
+      "text": "ZBY"
+    },
+    "welcomeText": "欢迎捏~",
+    "heroNotice": "Scroll to explore",
+    "locale": "zh-CN",
+    "copyright": "© 2026 zby. All rights reserved."
+  },
+  "profile": {
+    "name": "zby",
+    "displayName": "ZBY",
+    "avatarType": "emoji",
+    "avatar": "🫧",
+    "bio": "嗯，对，就长这样~",
+    "statusText": "持续施工中",
+    "location": "Web",
+    "email": "boyangzhang246@gmail.com",
+    "links": [
+      {
+        "label": "主页",
+        "href": "/"
+      },
+      {
+        "label": "Projects",
+        "href": "#body"
+      },
+      {
+        "label": "反馈",
+        "href": "#footer"
+      }
+    ]
+  },
+  "navigation": {
+    "topbar": {
+      "enabled": true,
+      "fixed": true,
+      "icon": "🧭",
+      "title": "Navigation",
+      "showSearch": true,
+      "searchPlaceholder": "搜索项目 / 标签 / 描述 / 关键词",
+      "showMoreButton": true,
+      "moreButtonIcon": "☰",
+      "quickActions": [
+        "theme-toggle",
+        "random-jump"
+      ]
+    },
+    "sidebar": {
+      "enabled": true,
+      "collapsedByDefault": true,
+      "triggerMode": "hover-or-click",
+      "showProgressDots": true,
+      "showCategoryList": true,
+      "showSectionIndex": true,
+      "groupBy": "category",
+      "highlightCurrentSection": true
+    },
+    "drawer": {
+      "id": "right-drawer",
+      "title": "更多",
+      "placement": "right",
+      "width": 360,
+      "sections": [
+        {
+          "id": "profile",
+          "title": "关于我",
+          "type": "profile"
+        },
+        {
+          "id": "stats",
+          "title": "站点概览",
+          "type": "stats"
+        },
+        {
+          "id": "preferences",
+          "title": "界面设置",
+          "type": "preferences"
+        },
+        {
+          "id": "explore",
+          "title": "探索入口",
+          "type": "links"
+        }
+      ]
+    }
+  },
+  "hero": {
+    "id": "header",
+    "headline": "There is nothing QwQ",
+    "subHeadline": "What title say is true",
+    "description": "这不是普通导航页，这是一个压缩毛巾，遇水变大变高~",
+    "primaryAction": {
+      "label": "开始探索",
+      "target": "#body"
+    },
+    "secondaryAction": {
+      "label": "随机看看",
+      "action": "random-item"
+    },
+    "quickNav": {
+      "source": "featured",
+      "max": 6,
+      "sort": "priority-desc"
+    },
+    "funPanels": [
+      {
+        "id": "site-stats",
+        "type": "stats",
+        "title": "站点统计"
+      },
+      {
+        "id": "recent-update",
+        "type": "recent-updates",
+        "title": "最近更新"
+      },
+      {
+        "id": "random-pick",
+        "type": "random-pick",
+        "title": "随机推荐"
+      }
+    ],
+    "scrollHint": {
+      "text": "向下探索",
+      "icon": "↓"
+    }
+  },
+  "footer": {
+    "id": "footer",
+    "headline": "滑到底啦",
+    "description": "感谢你一路看到这里。希望这些页面里，至少有一个让你觉得有趣。",
+    "actions": [
+      {
+        "label": "回到顶部",
+        "action": "scroll-to-top"
+      },
+      {
+        "label": "随机项目",
+        "action": "random-item"
+      }
+    ],
+    "links": [
+      {
+        "label": "关于本站",
+        "href": "#header"
+      },
+      {
+        "label": "全部项目",
+        "href": "#body"
+      },
+      {
+        "label": "联系我",
+        "href": "mailto:hello@zbyblq.xin"
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "game",
+      "title": "游戏",
+      "icon": "🎮",
+      "desc": "轻松好玩的小游戏与互动内容",
+      "theme": "playful-arcade",
+      "defaultLayout": "showcase-hero",
+      "order": 1
+    },
+    {
+      "id": "tool",
+      "title": "工具",
+      "icon": "🛠️",
+      "desc": "实用向的小工具与效率页面",
+      "theme": "productivity-blue",
+      "defaultLayout": "tool-workbench",
+      "order": 2
+    },
+    {
+      "id": "image",
+      "title": "图像",
+      "icon": "🖼️",
+      "desc": "图像处理、效果生成与视觉实验",
+      "theme": "pixel-lab",
+      "defaultLayout": "tool-workbench",
+      "order": 3
+    },
+    {
+      "id": "music",
+      "title": "音乐",
+      "icon": "🎵",
+      "desc": "基于 WebAudio 的乐器与节奏页面",
+      "theme": "neon-music",
+      "defaultLayout": "audio-stage",
+      "order": 4
+    },
+    {
+      "id": "algorithm",
+      "title": "算法",
+      "icon": "🧠",
+      "desc": "算法过程与数据结构可视化",
+      "theme": "matrix-path",
+      "defaultLayout": "algo-lab",
+      "order": 5
+    },
+    {
+      "id": "experiment",
+      "title": "实验",
+      "icon": "🧪",
+      "desc": "偏创意与偏探索性质的小实验",
+      "theme": "paper-lavender",
+      "defaultLayout": "showcase-hero",
+      "order": 6
+    },
+    {
+      "id": "festival",
+      "title": "节日",
+      "icon": "🎊",
+      "desc": "节日主题、祝福或纪念性质页面",
+      "theme": "festival-red",
+      "defaultLayout": "festive-card",
+      "order": 7
+    }
+  ],
+  "badgePresets": {
+    "green-signal": {
+      "bg": "rgba(77, 208, 122, 0.16)",
+      "border": "rgba(77, 208, 122, 0.4)",
+      "text": "#4dd07a"
+    },
+    "purple-fun": {
+      "bg": "rgba(176, 112, 255, 0.16)",
+      "border": "rgba(176, 112, 255, 0.4)",
+      "text": "#b070ff"
+    },
+    "red-alert": {
+      "bg": "rgba(255, 91, 91, 0.16)",
+      "border": "rgba(255, 91, 91, 0.4)",
+      "text": "#ff5b5b"
+    },
+    "blue-calm": {
+      "bg": "rgba(115, 186, 224, 0.16)",
+      "border": "rgba(115, 186, 224, 0.4)",
+      "text": "#73bae0"
+    },
+    "orange-lab": {
+      "bg": "rgba(255, 163, 72, 0.16)",
+      "border": "rgba(255, 163, 72, 0.4)",
+      "text": "#ffa348"
+    },
+    "yellow-pop": {
+      "bg": "rgba(255, 208, 73, 0.16)",
+      "border": "rgba(255, 208, 73, 0.4)",
+      "text": "#ffd049"
+    },
+    "gray-muted": {
+      "bg": "rgba(136, 136, 136, 0.16)",
+      "border": "rgba(136, 136, 136, 0.4)",
+      "text": "#888888"
+    }
+  },
+  "themePresets": {
+    "playful-arcade": {
+      "accent": "#7c5cff",
+      "accentSoft": "rgba(124, 92, 255, 0.18)",
+      "background": "linear-gradient(135deg, #14162d 0%, #1d1147 50%, #0f2340 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#7c5cff",
+      "pattern": "dots",
+      "mood": "playful"
+    },
+    "productivity-blue": {
+      "accent": "#73bae0",
+      "accentSoft": "rgba(115, 186, 224, 0.18)",
+      "background": "linear-gradient(135deg, #0d1b2a 0%, #10283d 45%, #12344a 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#73bae0",
+      "pattern": "grid",
+      "mood": "productive"
+    },
+    "paper-lavender": {
+      "accent": "#b388ff",
+      "accentSoft": "rgba(179, 136, 255, 0.18)",
+      "background": "linear-gradient(135deg, #191523 0%, #28203a 50%, #33264a 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#b388ff",
+      "pattern": "soft-noise",
+      "mood": "calm"
+    },
+    "festival-red": {
+      "accent": "#ff5b5b",
+      "accentSoft": "rgba(255, 91, 91, 0.18)",
+      "background": "linear-gradient(135deg, #2a0d11 0%, #56151c 50%, #8f1d24 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#ff9b5b",
+      "pattern": "spark",
+      "mood": "festive"
+    },
+    "locked-gray": {
+      "accent": "#888888",
+      "accentSoft": "rgba(136, 136, 136, 0.18)",
+      "background": "linear-gradient(135deg, #171717 0%, #232323 45%, #303030 100%)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "glow": "#9e9e9e",
+      "pattern": "diagonal-lines",
+      "mood": "locked"
+    },
+    "mono-tool": {
+      "accent": "#d1d5db",
+      "accentSoft": "rgba(209, 213, 219, 0.18)",
+      "background": "linear-gradient(135deg, #111827 0%, #1f2937 50%, #111827 100%)",
+      "surface": "rgba(255, 255, 255, 0.07)",
+      "glow": "#d1d5db",
+      "pattern": "mono-grid",
+      "mood": "focused"
+    },
+    "tomato-signal": {
+      "accent": "#ff7a59",
+      "accentSoft": "rgba(255, 122, 89, 0.18)",
+      "background": "linear-gradient(135deg, #1b0f10 0%, #3d1710 50%, #65251a 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#ff7a59",
+      "pattern": "curve-flow",
+      "mood": "experimental"
+    },
+    "forest-grid": {
+      "accent": "#52d18c",
+      "accentSoft": "rgba(82, 209, 140, 0.18)",
+      "background": "linear-gradient(135deg, #0e1f18 0%, #143528 50%, #19503b 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#52d18c",
+      "pattern": "node-grid",
+      "mood": "structured"
+    },
+    "neon-music": {
+      "accent": "#ff73d9",
+      "accentSoft": "rgba(255, 115, 217, 0.18)",
+      "background": "linear-gradient(135deg, #110f24 0%, #24163a 45%, #0d2338 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#ff73d9",
+      "pattern": "wave",
+      "mood": "rhythmic"
+    },
+    "sunset-algo": {
+      "accent": "#ffb454",
+      "accentSoft": "rgba(255, 180, 84, 0.18)",
+      "background": "linear-gradient(135deg, #1b1622 0%, #37233d 45%, #533520 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#ffb454",
+      "pattern": "bars",
+      "mood": "analytical"
+    },
+    "pixel-lab": {
+      "accent": "#4fc3f7",
+      "accentSoft": "rgba(79, 195, 247, 0.18)",
+      "background": "linear-gradient(135deg, #0c1726 0%, #12253a 45%, #1a3047 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#4fc3f7",
+      "pattern": "pixel-grid",
+      "mood": "digital"
+    },
+    "matrix-path": {
+      "accent": "#70e0a3",
+      "accentSoft": "rgba(112, 224, 163, 0.18)",
+      "background": "linear-gradient(135deg, #081611 0%, #10261d 45%, #153527 100%)",
+      "surface": "rgba(255, 255, 255, 0.08)",
+      "glow": "#70e0a3",
+      "pattern": "matrix",
+      "mood": "systematic"
+    }
+  },
+  "sectionPresets": {
+    "showcase-hero": {
+      "align": "split",
+      "contentWidth": "wide",
+      "previewType": "mockup",
+      "showFeatureList": true,
+      "showMetaBar": true,
+      "motion": "fade-up-stagger"
+    },
+    "tool-workbench": {
+      "align": "split",
+      "contentWidth": "wide",
+      "previewType": "tool-panel",
+      "showFeatureList": true,
+      "showMetaBar": true,
+      "motion": "slide-fade"
+    },
+    "algo-lab": {
+      "align": "split",
+      "contentWidth": "wide",
+      "previewType": "diagram",
+      "showFeatureList": true,
+      "showMetaBar": true,
+      "motion": "grid-rise"
+    },
+    "audio-stage": {
+      "align": "center-split",
+      "contentWidth": "wide",
+      "previewType": "waveform",
+      "showFeatureList": true,
+      "showMetaBar": true,
+      "motion": "pulse-fade"
+    },
+    "festive-card": {
+      "align": "center",
+      "contentWidth": "medium",
+      "previewType": "ornament",
+      "showFeatureList": true,
+      "showMetaBar": true,
+      "motion": "float-fade"
+    },
+    "disabled-state": {
+      "align": "center",
+      "contentWidth": "medium",
+      "previewType": "locked",
+      "showFeatureList": false,
+      "showMetaBar": true,
+      "motion": "slow-fade"
+    }
+  },
+  "items": [
+    {
+      "id": "little-games",
+      "href": "https://game.zbyblq.xin",
+      "icon": "🎮",
+      "title": "小游戏合集",
+      "desc": "2048、华容道、迷宫、扫雷等趣味小游戏",
+      "tags": [
+        "游戏"
+      ],
+      "badge": "might NEW",
+      "badgeColor": "G",
+      "badgeTone": "green-signal",
+      "status": "active",
+      "createTime": "2026-01-01",
+      "updateTime": "2026-01-02",
+      "category": "game",
+      "group": "轻松娱乐",
+      "featured": true,
+      "priority": 98,
+      "theme": "playful-arcade",
+      "layout": "showcase-hero",
+      "accent": "#7c5cff",
+      "previewType": "arcade-grid",
+      "features": [
+        "多个经典小游戏入口",
+        "适合随手开玩",
+        "轻量直接进入"
+      ],
+      "searchKeywords": [
+        "小游戏",
+        "2048",
+        "华容道",
+        "迷宫",
+        "扫雷",
+        "game"
+      ],
+      "ctaText": "开始玩",
+      "secondaryText": "查看合集",
+      "mood": "playful",
+      "availability": "online",
+      "order": 1,
+      "relatedIds": [
+        "piano-keys",
+        "drum-pad"
+      ]
+    },
+    {
+      "id": "todolist",
+      "href": "https://todo.zbyblq.xin",
+      "icon": "📝",
+      "title": "TodoList",
+      "desc": "一个简单易用的在线待办事项管理工具,使用将一年设置为36*10天的时间管理方法,支持任务导入导出系统",
+      "tags": [
+        "工具"
+      ],
+      "badge": "TODO IT!!!",
+      "badgeColor": "#73bae0",
+      "badgeTone": "blue-calm",
+      "status": "active",
+      "createTime": "2026-01-01",
+      "updateTime": "2026-01-02",
+      "category": "tool",
+      "group": "效率工具",
+      "featured": true,
+      "priority": 100,
+      "theme": "productivity-blue",
+      "layout": "showcase-hero",
+      "accent": "#73bae0",
+      "previewType": "app-dashboard",
+      "features": [
+        "待办事项管理",
+        "36×10 时间规划法",
+        "任务导入导出"
+      ],
+      "searchKeywords": [
+        "todo",
+        "待办",
+        "任务",
+        "时间管理",
+        "导入",
+        "导出"
+      ],
+      "ctaText": "开始管理",
+      "secondaryText": "看看功能",
+      "mood": "productive",
+      "availability": "online",
+      "order": 2,
+      "relatedIds": [
+        "study-log",
+        "eft-tool"
+      ]
+    },
+    {
+      "id": "study-log",
+      "href": "https://done.zbyblq.xin",
+      "icon": "📚",
+      "title": "学习日志",
+      "desc": "记录你的学习过程",
+      "tags": [
+        "工具"
+      ],
+      "badge": "NEW",
+      "badgeColor": "P",
+      "badgeTone": "purple-fun",
+      "status": "active",
+      "createTime": "2026-01-01",
+      "updateTime": "2026-01-02",
+      "category": "tool",
+      "group": "成长记录",
+      "featured": true,
+      "priority": 92,
+      "theme": "paper-lavender",
+      "layout": "showcase-hero",
+      "accent": "#b388ff",
+      "previewType": "timeline-card",
+      "features": [
+        "记录学习过程",
+        "持续成长追踪",
+        "适合长期积累"
+      ],
+      "searchKeywords": [
+        "学习",
+        "日志",
+        "成长",
+        "记录",
+        "done",
+        "study log"
+      ],
+      "ctaText": "开始记录",
+      "secondaryText": "了解页面",
+      "mood": "calm",
+      "availability": "online",
+      "order": 3,
+      "relatedIds": [
+        "todolist",
+        "sort-viz"
+      ]
+    },
+    {
+      "id": "future-feature",
+      "href": "/sub/birthday/index.html",
+      "icon": "🎂",
+      "title": "zby的生日",
+      "desc": "嘻嘻嘻~这是我的生日哦~,不过已经过了啦啦啦啦啦啦啦啦~~~",
+      "tags": [
+        "实验"
+      ],
+      "badge": "BAN",
+      "badgeColor": "#888888",
+      "badgeTone": "gray-muted",
+      "status": "inactive",
+      "createTime": null,
+      "updateTime": "2025-11-18",
+      "banMsg": "等今年的吧~",
+      "category": "festival",
+      "group": "纪念页面",
+      "featured": false,
+      "priority": 20,
+      "theme": "locked-gray",
+      "layout": "disabled-state",
+      "accent": "#888888",
+      "previewType": "locked-card",
+      "features": [],
+      "searchKeywords": [
+        "生日",
+        "birthday",
+        "纪念",
+        "未开放"
+      ],
+      "ctaText": "暂未开放",
+      "secondaryText": "查看说明",
+      "mood": "locked",
+      "availability": "locked",
+      "order": 99,
+      "relatedIds": [
+        "cny-blessing"
+      ]
+    },
+    {
+      "id": "eft-tool",
+      "href": "/sub/eft/index.html",
+      "icon": "🔤",
+      "title": "英文字体转换工具",
+      "desc": "输入英文，点击样式即可一键转换特殊字体，支持多种花体/粗体/斜体等Unicode样式。",
+      "tags": [
+        "工具"
+      ],
+      "badge": "not NEW",
+      "badgeColor": "#444",
+      "badgeTone": "gray-muted",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-02",
+      "category": "tool",
+      "group": "文字工具",
+      "featured": false,
+      "priority": 78,
+      "theme": "mono-tool",
+      "layout": "tool-workbench",
+      "accent": "#d1d5db",
+      "previewType": "text-style-grid",
+      "features": [
+        "多种 Unicode 特殊字体",
+        "点击即可转换复制",
+        "适合昵称与装饰文本"
+      ],
+      "searchKeywords": [
+        "字体",
+        "英文",
+        "unicode",
+        "花体",
+        "斜体",
+        "粗体"
+      ],
+      "ctaText": "开始转换",
+      "secondaryText": "查看样式",
+      "mood": "focused",
+      "availability": "online",
+      "order": 5,
+      "relatedIds": [
+        "todolist",
+        "study-log"
+      ]
+    },
+    {
+      "id": "encryption-graph",
+      "href": "/sub/encryptionGraph/index.html",
+      "icon": "🍅",
+      "title": "小番茄图片混淆",
+      "desc": "基于空间填充曲线的图片混淆工具，混淆后压缩仍保持色彩，支持混淆/解混淆/还原操作",
+      "tags": [
+        "图像",
+        "工具"
+      ],
+      "badge": "XIXI",
+      "badgeColor": "O",
+      "badgeTone": "orange-lab",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-02",
+      "category": "image",
+      "group": "图像实验",
+      "featured": true,
+      "priority": 90,
+      "theme": "tomato-signal",
+      "layout": "tool-workbench",
+      "accent": "#ff7a59",
+      "previewType": "image-transform",
+      "features": [
+        "基于空间填充曲线",
+        "支持混淆与解混淆",
+        "压缩后仍保留较好色彩"
+      ],
+      "searchKeywords": [
+        "图片混淆",
+        "图像加密",
+        "空间填充曲线",
+        "encryption graph",
+        "image obfuscation"
+      ],
+      "ctaText": "开始混淆",
+      "secondaryText": "了解原理",
+      "mood": "experimental",
+      "availability": "online",
+      "order": 6,
+      "relatedIds": [
+        "photo-patina",
+        "pixelate",
+        "img2ascii"
+      ]
+    },
+    {
+      "id": "btree-visual",
+      "href": "/sub/btree/index.html",
+      "icon": "🌳",
+      "title": "二叉树可视化",
+      "desc": "输入层序遍历数组，自动生成可视化二叉树，支持保存为图片",
+      "tags": [
+        "算法",
+        "工具"
+      ],
+      "badge": "USELESS",
+      "badgeColor": "G",
+      "badgeTone": "green-signal",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-03",
+      "category": "algorithm",
+      "group": "数据结构",
+      "featured": false,
+      "priority": 84,
+      "theme": "forest-grid",
+      "layout": "algo-lab",
+      "accent": "#52d18c",
+      "previewType": "tree-diagram",
+      "features": [
+        "层序数组转二叉树",
+        "自动可视化生成",
+        "支持保存图片"
+      ],
+      "searchKeywords": [
+        "二叉树",
+        "可视化",
+        "层序遍历",
+        "tree",
+        "binary tree"
+      ],
+      "ctaText": "生成二叉树",
+      "secondaryText": "查看结构",
+      "mood": "structured",
+      "availability": "online",
+      "order": 7,
+      "relatedIds": [
+        "sort-viz",
+        "PathfindingVisualize"
+      ]
+    },
+    {
+      "id": "piano-keys",
+      "href": "/sub/playPiano/index.html",
+      "icon": "🎹",
+      "title": "Piano Keys",
+      "desc": "基于 Web Audio API 的在线钢琴，支持键盘演奏、多种音色切换、预设曲目播放",
+      "tags": [
+        "音乐"
+      ],
+      "badge": "INTERESTING",
+      "badgeColor": "P",
+      "badgeTone": "purple-fun",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-04",
+      "category": "music",
+      "group": "音乐玩具",
+      "featured": true,
+      "priority": 94,
+      "theme": "neon-music",
+      "layout": "audio-stage",
+      "accent": "#ff73d9",
+      "previewType": "keyboard-wave",
+      "features": [
+        "在线钢琴演奏",
+        "支持键盘操作",
+        "多音色与预设曲目"
+      ],
+      "searchKeywords": [
+        "钢琴",
+        "piano",
+        "keyboard",
+        "web audio",
+        "乐器"
+      ],
+      "ctaText": "开始弹奏",
+      "secondaryText": "试听功能",
+      "mood": "rhythmic",
+      "availability": "online",
+      "order": 8,
+      "relatedIds": [
+        "drum-pad",
+        "kalimba"
+      ]
+    },
+    {
+      "id": "sort-viz",
+      "href": "/sub/sortviz/index.html",
+      "icon": "📊",
+      "title": "排序算法可视化",
+      "desc": "支持冒泡/选择/插入/归并/快速，观察比较与交换过程，支持调速与单步执行",
+      "tags": [
+        "算法",
+        "工具"
+      ],
+      "badge": "GOOD-LOOKING",
+      "badgeColor": "R",
+      "badgeTone": "red-alert",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-06",
+      "category": "algorithm",
+      "group": "算法可视化",
+      "featured": true,
+      "priority": 96,
+      "theme": "sunset-algo",
+      "layout": "algo-lab",
+      "accent": "#ffb454",
+      "previewType": "sorting-bars",
+      "features": [
+        "多种排序算法",
+        "比较与交换过程可见",
+        "支持调速与单步执行"
+      ],
+      "searchKeywords": [
+        "排序",
+        "算法",
+        "冒泡",
+        "归并",
+        "快速排序",
+        "visualization"
+      ],
+      "ctaText": "开始观察",
+      "secondaryText": "查看算法",
+      "mood": "analytical",
+      "availability": "online",
+      "order": 9,
+      "relatedIds": [
+        "btree-visual",
+        "PathfindingVisualize"
+      ]
+    },
+    {
+      "id": "img2ascii",
+      "href": "/sub/img2ascii/index.html",
+      "icon": "🧩",
+      "title": "图片转 ASCII",
+      "desc": "上传图片生成字符画，支持亮度/对比度/反相，彩色 ASCII，可导出 TXT/PNG",
+      "tags": [
+        "图像",
+        "工具",
+        "实验"
+      ],
+      "badge": "INTERESTING",
+      "badgeColor": "B",
+      "badgeTone": "blue-calm",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-06",
+      "category": "image",
+      "group": "图像实验",
+      "featured": true,
+      "priority": 93,
+      "theme": "pixel-lab",
+      "layout": "tool-workbench",
+      "accent": "#4fc3f7",
+      "previewType": "ascii-grid",
+      "features": [
+        "图片转字符画",
+        "支持彩色 ASCII",
+        "支持导出 TXT 与 PNG"
+      ],
+      "searchKeywords": [
+        "ascii",
+        "字符画",
+        "图片转文字",
+        "彩色 ascii",
+        "导出 png"
+      ],
+      "ctaText": "开始转换",
+      "secondaryText": "查看效果",
+      "mood": "digital",
+      "availability": "online",
+      "order": 10,
+      "relatedIds": [
+        "pixelate",
+        "floyd-steinberg",
+        "photo-patina"
+      ]
+    },
+    {
+      "id": "drum-pad",
+      "href": "/sub/drum/index.html",
+      "icon": "🥁",
+      "title": "Drum Pad 鼓机",
+      "desc": "纯 WebAudio 合成鼓垫：Kick/Snare/Hat/Clap，支持键盘演奏与 16 步编排循环",
+      "tags": [
+        "音乐"
+      ],
+      "badge": "IDK",
+      "badgeColor": "G",
+      "badgeTone": "green-signal",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-06",
+      "category": "music",
+      "group": "节奏玩具",
+      "featured": false,
+      "priority": 86,
+      "theme": "neon-music",
+      "layout": "audio-stage",
+      "accent": "#70e0a3",
+      "previewType": "step-sequencer",
+      "features": [
+        "鼓垫合成音色",
+        "支持键盘演奏",
+        "16 步循环编排"
+      ],
+      "searchKeywords": [
+        "鼓机",
+        "drum pad",
+        "节奏",
+        "step sequencer",
+        "webaudio"
+      ],
+      "ctaText": "开始打鼓",
+      "secondaryText": "进入节奏台",
+      "mood": "rhythmic",
+      "availability": "online",
+      "order": 11,
+      "relatedIds": [
+        "piano-keys",
+        "kalimba"
+      ]
+    },
+    {
+      "id": "kalimba",
+      "href": "/sub/kalimba/index.html",
+      "icon": "🎶",
+      "title": "Kalimba 拇指琴",
+      "desc": "纯 WebAudio 合成拇指琴：点击/键盘演奏，支持调式选择与录制循环，音色治愈",
+      "tags": [
+        "音乐"
+      ],
+      "badge": "IDK",
+      "badgeColor": "P",
+      "badgeTone": "purple-fun",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-06",
+      "category": "music",
+      "group": "治愈音色",
+      "featured": false,
+      "priority": 85,
+      "theme": "neon-music",
+      "layout": "audio-stage",
+      "accent": "#b388ff",
+      "previewType": "kalimba-panel",
+      "features": [
+        "拇指琴模拟演奏",
+        "支持调式切换",
+        "支持录制循环"
+      ],
+      "searchKeywords": [
+        "kalimba",
+        "拇指琴",
+        "治愈",
+        "webaudio",
+        "loop"
+      ],
+      "ctaText": "开始拨动",
+      "secondaryText": "听听音色",
+      "mood": "calm",
+      "availability": "online",
+      "order": 12,
+      "relatedIds": [
+        "piano-keys",
+        "drum-pad"
+      ]
+    },
+    {
+      "id": "pixelate",
+      "href": "/sub/pixelate/index.html",
+      "icon": "🟦",
+      "title": "Pixelate · 图片像素化",
+      "desc": "上传图片 → 调像素块大小 → 导出PNG（可选限制色板 8/16/32 色）",
+      "tags": [
+        "图像",
+        "工具"
+      ],
+      "badge": "IDK",
+      "badgeColor": "Y",
+      "badgeTone": "yellow-pop",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-06",
+      "category": "image",
+      "group": "像素处理",
+      "featured": false,
+      "priority": 87,
+      "theme": "pixel-lab",
+      "layout": "tool-workbench",
+      "accent": "#ffd049",
+      "previewType": "pixel-grid",
+      "features": [
+        "图片像素化处理",
+        "像素块大小可调",
+        "可选限制色板导出"
+      ],
+      "searchKeywords": [
+        "像素化",
+        "pixelate",
+        "图像处理",
+        "色板",
+        "png"
+      ],
+      "ctaText": "开始像素化",
+      "secondaryText": "查看参数",
+      "mood": "digital",
+      "availability": "online",
+      "order": 13,
+      "relatedIds": [
+        "img2ascii",
+        "floyd-steinberg",
+        "photo-patina"
+      ]
+    },
+    {
+      "id": "floyd-steinberg",
+      "href": "/sub/Floyd–Steinberg/index.html",
+      "icon": "⬛️",
+      "title": "Dithering · Floyd–Steinberg",
+      "desc": "黑白/限定色 Floyd–Steinberg 误差扩散抖动：复古报纸风、GameBoy 风",
+      "tags": [
+        "图像",
+        "工具"
+      ],
+      "badge": "USELESS",
+      "badgeColor": "B",
+      "badgeTone": "blue-calm",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-06",
+      "category": "image",
+      "group": "复古风格",
+      "featured": false,
+      "priority": 82,
+      "theme": "mono-tool",
+      "layout": "tool-workbench",
+      "accent": "#d1d5db",
+      "previewType": "dither-preview",
+      "features": [
+        "误差扩散抖动处理",
+        "支持黑白与限定色",
+        "复古报纸与掌机风格"
+      ],
+      "searchKeywords": [
+        "dithering",
+        "Floyd Steinberg",
+        "抖动",
+        "误差扩散",
+        "GameBoy"
+      ],
+      "ctaText": "开始抖动",
+      "secondaryText": "了解效果",
+      "mood": "focused",
+      "availability": "online",
+      "order": 14,
+      "relatedIds": [
+        "pixelate",
+        "img2ascii",
+        "photo-patina"
+      ]
+    },
+    {
+      "id": "PathfindingVisualize",
+      "href": "/sub/PathfindingVisualize/index.html",
+      "icon": "🧩",
+      "title": "路径寻找可视化",
+      "desc": "可视化不同路径寻找算法的过程，支持多种算法与参数设置",
+      "tags": [
+        "算法",
+        "工具"
+      ],
+      "badge": "INTERESTING",
+      "badgeColor": "O",
+      "badgeTone": "orange-lab",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-06",
+      "category": "algorithm",
+      "group": "路径算法",
+      "featured": true,
+      "priority": 91,
+      "theme": "matrix-path",
+      "layout": "algo-lab",
+      "accent": "#70e0a3",
+      "previewType": "path-grid",
+      "features": [
+        "路径寻找过程可视化",
+        "支持多种算法切换",
+        "支持参数调整"
+      ],
+      "searchKeywords": [
+        "路径寻找",
+        "pathfinding",
+        "A*",
+        "BFS",
+        "可视化",
+        "grid"
+      ],
+      "ctaText": "开始寻路",
+      "secondaryText": "查看算法",
+      "mood": "systematic",
+      "availability": "online",
+      "order": 15,
+      "relatedIds": [
+        "sort-viz",
+        "btree-visual"
+      ]
+    },
+    {
+      "id": "photo-patina",
+      "href": "/sub/photoPatina/index.html",
+      "icon": "🖼️",
+      "title": "电子包浆 · JPEG 二次压缩",
+      "desc": "上传照片，选择包浆风格与强度，生成具有复古包浆效果的图片",
+      "tags": [
+        "图像",
+        "工具",
+        "实验"
+      ],
+      "badge": "INTERESTING",
+      "badgeColor": "Y",
+      "badgeTone": "yellow-pop",
+      "status": "active",
+      "createTime": null,
+      "updateTime": "2026-01-06",
+      "category": "image",
+      "group": "图像实验",
+      "featured": true,
+      "priority": 89,
+      "theme": "tomato-signal",
+      "layout": "tool-workbench",
+      "accent": "#ffb454",
+      "previewType": "before-after",
+      "features": [
+        "JPEG 二次压缩风格化",
+        "包浆强度可调",
+        "复古氛围明显"
+      ],
+      "searchKeywords": [
+        "包浆",
+        "jpeg",
+        "复古照片",
+        "图像实验",
+        "压缩效果"
+      ],
+      "ctaText": "开始包浆",
+      "secondaryText": "查看示例",
+      "mood": "experimental",
+      "availability": "online",
+      "order": 16,
+      "relatedIds": [
+        "encryption-graph",
+        "pixelate",
+        "img2ascii"
+      ]
+    }
+  ],
+  "settings": {
+    "showTags": true,
+    "showBadge": true,
+    "showUpdateTime": true,
+    "showCreateTime": true,
+    "maxTagsDisplay": 3,
+    "enableMotion": true,
+    "enableScrollSnap": true,
+    "enableDampingScroll": true,
+    "defaultTheme": "dark",
+    "sidebarCollapsed": true,
+    "headerQuickCount": 6,
+    "bodyFullscreen": true,
+    "bodyRenderMode": "item-per-screen",
+    "searchFields": [
+      "title",
+      "desc",
+      "tags",
+      "badge",
+      "searchKeywords"
+    ],
+    "sortDefault": "order-asc",
+    "filterDefault": {
+      "status": [
+        "active",
+        "limited",
+        "inactive"
+      ],
+      "featuredOnly": false
+    }
+  }
+}
