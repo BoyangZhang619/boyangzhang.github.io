@@ -66,17 +66,10 @@ const NavSystem = {
     // 加载导航项数据
     async loadNavItems() {
         try {
-            const response = await fetch('/data/tags', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'cache-control': 'no-cache no-store',
-                },
-                body: JSON.stringify({ auth: 'zby' })
-            });
+            const response = await fetch('mainpage/data/navItems.json');
             if (!response.ok) throw new Error('导航数据加载失败');
             const data = await response.json();
-            this.data.navItems = data.tags.items || [];
+            this.data.navItems = data.items || [];
             this.data.IP = data.IP || 'Unknown';
             this.data.auth = data.auth || 'guest';
             this.data.settings = data.settings || {};

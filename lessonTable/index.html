@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课表生成器</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>课表生成器</h1>
+            <div class="controls">
+                <label for="jsonFile" class="btn-upload">
+                    上传JSON文件
+                    <input type="file" id="jsonFile" accept=".json" style="display: none;">
+                </label>
+                <button id="loadDefault" class="btn-load">加载默认课表</button>
+                <button id="downloadImage" class="btn-download" style="display: none;">下载为图片</button>
+                <button id="jsonFormatBtn" class="btn-json-format">📋 JSON格式要求</button>
+            </div>
+        </header>
+
+        <div id="info-panel" class="info-panel" style="display: none;">
+            <div class="info-item">
+                <span class="label">学生:</span>
+                <span id="studentName" class="value"></span>
+            </div>
+            <div class="info-item">
+                <span class="label">班级:</span>
+                <span id="className" class="value"></span>
+            </div>
+            <div class="info-item">
+                <span class="label">学期:</span>
+                <span id="semester" class="value"></span>
+            </div>
+            <div class="info-item">
+                <span class="label">总周数:</span>
+                <span id="totalWeeks" class="value"></span>
+            </div>
+        </div>
+
+        <div id="day-selector" class="day-selector" style="display: none;">
+            <div class="selector-group">
+                <div class="view-mode-buttons">
+                    <button id="viewDayMode" class="view-mode-btn active">单日视图</button>
+                    <button id="viewWeekMode" class="view-mode-btn">周视图</button>
+                </div>
+            </div>
+
+            <div class="selector-group">
+                <div class="day-buttons">
+                    <button class="day-btn" data-day="1">周一</button>
+                    <button class="day-btn" data-day="2">周二</button>
+                    <button class="day-btn" data-day="3">周三</button>
+                    <button class="day-btn" data-day="4">周四</button>
+                    <button class="day-btn" data-day="5">周五</button>
+                    <button class="day-btn" data-day="6">周六</button>
+                    <button class="day-btn" data-day="7">周日</button>
+                </div>
+            </div>
+
+            <div class="selector-group week-selector-group" style="display: none;">
+                <label for="weekSelector">选择周次:</label>
+                <select id="weekSelector"></select>
+            </div>
+        </div>
+
+        <div id="timetable-container" style="display: none;">
+            <div id="timetable" class="timetable"></div>
+        </div>
+
+        <div id="empty-state" class="empty-state">
+            <div class="empty-icon">▬</div>
+            <p>请上传 JSON 课表文件或点击"加载默认课表"开始</p>
+        </div>
+
+        <div id="error-message" class="error-message" style="display: none;"></div>
+    </div>
+
+    <div id="jsonFormatModal" class="json-format-modal">
+        <div class="json-format-content">
+            <button class="modal-close" onclick="document.getElementById('jsonFormatModal').classList.remove('active')">×</button>
+            <div class="modal-header">JSON 格式要求</div>
+            
+            <div class="json-section">
+                <div class="json-section-title">📋 文件结构</div>
+                <div class="json-field-example">{
+  "datas": {
+    "queryxskb": {
+      "rows": [
+        { /* 课程对象 */ },
+        { /* 课程对象 */ }
+      ]
+    }
+  }
+}</div>
+            </div>
+
+            <div class="json-section">
+                <div class="json-section-title">🎓 课程对象字段</div>
+                
+                <div class="json-field-item">
+                    <div class="json-field-name">XM <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">学生姓名</div>
+                    <div class="json-field-example">"XM": "王小明"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">SKBJ <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">所属班级</div>
+                    <div class="json-field-example">"SKBJ": "计算机2302班"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">XNXQDM_DISPLAY <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">学年学期显示</div>
+                    <div class="json-field-example">"XNXQDM_DISPLAY": "2025-2026-1"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">KCM <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">课程名称</div>
+                    <div class="json-field-example">"KCM": "高等数学"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">SKJS <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">授课教师</div>
+                    <div class="json-field-example">"SKJS": "李教授"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">JASMC <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">教室地点</div>
+                    <div class="json-field-example">"JASMC": "文科楼105"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">SKXQ <span class="json-field-type">number</span></div>
+                    <div class="json-field-desc">上课星期 (1=周一, 2=周二, ... 7=周日)</div>
+                    <div class="json-field-example">"SKXQ": 3</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">KSJC <span class="json-field-type">number</span></div>
+                    <div class="json-field-desc">课程开始节次 (1-12)</div>
+                    <div class="json-field-example">"KSJC": 3</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">JSJC <span class="json-field-type">number</span></div>
+                    <div class="json-field-desc">课程结束节次 (1-12，必须 ≥ KSJC)</div>
+                    <div class="json-field-example">"JSJC": 4</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">SKZC <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">上课周次 (仅含0和1的字符串，1表示该周上课)</div>
+                    <div class="json-field-example">"SKZC": "1111111111111111111111111"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">ZCMC <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">周次描述 (可选，如"第1-25周")</div>
+                    <div class="json-field-example">"ZCMC": "第1-25周"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">KCPYCCDM_DISPLAY <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">课程分类 ("必修课" 或 "选修课")</div>
+                    <div class="json-field-example">"KCPYCCDM_DISPLAY": "必修课"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">XF <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">学分</div>
+                    <div class="json-field-example">"XF": "4"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">XS <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">学时</div>
+                    <div class="json-field-example">"XS": "64"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">KCH <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">课程代码</div>
+                    <div class="json-field-example">"KCH": "MA001"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">JXBID <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">教学班ID (用于课程去重)</div>
+                    <div class="json-field-example">"JXBID": "class_001"</div>
+                </div>
+
+                <div class="json-field-item">
+                    <div class="json-field-name">KKDWDM_DISPLAY <span class="json-field-type">string</span></div>
+                    <div class="json-field-desc">开课单位显示</div>
+                    <div class="json-field-example">"KKDWDM_DISPLAY": "数学与统计学院"</div>
+                </div>
+            </div>
+
+            <div class="json-section">
+                <div class="json-section-title">💡 最小示例</div>
+                <div class="json-field-example">{
+  "datas": {
+    "queryxskb": {
+      "rows": [
+        {
+          "XM": "王小明",
+          "SKBJ": "计算机2302班",
+          "XNXQDM_DISPLAY": "2025-2026-1",
+          "KCM": "高等数学",
+          "SKJS": "李教授",
+          "JASMC": "文科楼105",
+          "SKXQ": 3,
+          "KSJC": 3,
+          "JSJC": 4,
+          "SKZC": "1111111111111111111111111",
+          "ZCMC": "第1-25周",
+          "KCPYCCDM_DISPLAY": "必修课",
+          "XF": "4",
+          "XS": "64",
+          "KCH": "MA001",
+          "JXBID": "class_001",
+          "KKDWDM_DISPLAY": "数学与统计学院"
+        }
+      ]
+    }
+  }
+}</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

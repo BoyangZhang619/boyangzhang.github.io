@@ -1,0 +1,852 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Lato:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #F9F7F4 0%, #F5F2ED 100%);
+    min-height: 100vh;
+    padding: 32px 20px;
+    color: #4A4A4A;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    background: #FFFFFF;
+    border-radius: 0;
+    padding: 48px 32px 40px 32px;
+    margin-bottom: 48px;
+    box-shadow: none;
+    border-bottom: 1px solid #E8E5E0;
+}
+
+header h1 {
+    font-family: 'Playfair Display', serif;
+    color: #2C3E50;
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    letter-spacing: 0.5px;
+}
+
+.header-action {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.controls {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.btn-upload,
+.btn-load,
+.btn-download {
+    padding: 12px 28px;
+    border: 1px solid #D4C5B9;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: #2C3E50;
+    letter-spacing: 0.3px;
+}
+
+.btn-upload {
+    background: #2C3E50;
+    color: #FFFFFF;
+    border-color: #2C3E50;
+}
+
+.btn-upload:hover {
+    background: #1F2A36;
+    border-color: #1F2A36;
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.15);
+}
+
+.btn-load {
+    border-color: #C4A76C;
+    color: #C4A76C;
+}
+
+.btn-load:hover {
+    background: #C4A76C;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(196, 167, 108, 0.15);
+}
+
+.btn-download {
+    border-color: #7A8B6F;
+    color: #7A8B6F;
+}
+
+.btn-download:hover {
+    background: #7A8B6F;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(122, 139, 111, 0.15);
+}
+
+.btn-json-format {
+    padding: 12px 28px;
+    border: 1px solid #D4C5B9;
+    background: transparent;
+    color: #2C3E50;
+    border-radius: 0;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-json-format:hover {
+    border-color: #A89968;
+    color: #A89968;
+    box-shadow: 0 2px 6px rgba(168, 153, 104, 0.1);
+}
+
+.info-panel {
+    background: #FFFFFF;
+    border-radius: 0;
+    padding: 32px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    border: 1px solid #E8E5E0;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    min-width: 140px;
+}
+
+.info-item .label {
+    font-weight: 500;
+    color: #A89968;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.info-item .value {
+    color: #2C3E50;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.day-selector {
+    background: #FFFFFF;
+    border-radius: 0;
+    padding: 32px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border: 1px solid #E8E5E0;
+}
+
+.selector-group {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E8E5E0;
+}
+
+.selector-group:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.view-mode-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.view-mode-btn {
+    padding: 10px 22px;
+    border: 1px solid #D4C5B9;
+    background: transparent;
+    color: #4A4A4A;
+    border-radius: 0;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+.view-mode-btn:hover {
+    border-color: #C4A76C;
+    color: #C4A76C;
+    box-shadow: 0 2px 6px rgba(196, 167, 108, 0.1);
+}
+
+.view-mode-btn.active {
+    background: #2C3E50;
+    color: #FFFFFF;
+    border-color: #2C3E50;
+}
+
+.day-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.day-btn {
+    padding: 10px 20px;
+    border: 1px solid #D4C5B9;
+    background: transparent;
+    color: #4A4A4A;
+    border-radius: 0;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+.day-btn:hover {
+    border-color: #A89968;
+    color: #A89968;
+    box-shadow: 0 2px 6px rgba(168, 153, 104, 0.1);
+}
+
+.day-btn.active {
+    background: #2C3E50;
+    color: #FFFFFF;
+    border-color: #2C3E50;
+}
+
+.week-selector-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.week-selector-group label {
+    font-weight: 500;
+    color: #4A4A4A;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+.week-selector-group select {
+    padding: 10px 16px;
+    border: 1px solid #D4C5B9;
+    border-radius: 0;
+    background: #FFFFFF;
+    color: #4A4A4A;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 160px;
+    font-family: 'Lato', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.week-selector-group select:hover {
+    border-color: #A89968;
+    box-shadow: 0 2px 6px rgba(168, 153, 104, 0.1);
+}
+
+.week-selector-group select:focus {
+    outline: none;
+    border-color: #C4A76C;
+    box-shadow: 0 2px 6px rgba(196, 167, 108, 0.1);
+}
+
+#timetable-container {
+    background: #FFFFFF;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow-x: auto;
+    border: 1px solid #E8E5E0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.timetable {
+    display: grid;
+    grid-template-columns: 70px repeat(12, 1fr);
+    gap: 0;
+    background: #FFFFFF;
+    padding: 0;
+    border-radius: 0;
+    overflow: hidden;
+    width: 100%;
+    min-width: 100%;
+}
+
+/* 周视图行高统一设置 */
+.timetable.week-view {
+    grid-auto-rows: 80px;
+}
+
+/* 日视图行高设置 */
+.timetable.day-view {
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.timetable-header {
+    background: #2C3E50;
+    color: #FFFFFF;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 8px;
+    font-size: 13px;
+    text-align: center;
+    border-right: 1px solid #D4C5B9;
+    border-bottom: 1px solid #D4C5B9;
+    letter-spacing: 0.3px;
+}
+
+.timetable-cell {
+    background: #FFFFFF;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    min-height: 100px;
+    font-size: 12px;
+    border-right: 1px solid #E8E5E0;
+    border-bottom: 1px solid #E8E5E0;
+    word-break: break-word;
+    overflow: hidden;
+    position: relative;
+}
+
+.timetable-time-cell {
+    background: #F5F2ED;
+    font-weight: 500;
+    color: #4A4A4A;
+    text-align: center;
+    font-size: 12px;
+    padding: 12px 8px;
+    border-right: 1px solid #D4C5B9;
+    border-bottom: 1px solid #E8E5E0;
+    letter-spacing: 0.2px;
+}
+
+.lesson-card {
+    color: #2C3E50;
+    padding: 6px;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+    background: #F0E9E0;
+    border-left: 3px solid #A89968;
+    margin: 3px 2px;
+    cursor: pointer;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    min-width: 0;
+    word-break: break-word;
+}
+
+.lesson-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-left-color: #C4A76C;
+}
+
+.lesson-name {
+    font-weight: 600;
+    font-size: 11px;
+    margin-bottom: 2px;
+    color: #2C3E50;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.2;
+}
+
+.lesson-teacher {
+    font-size: 10px;
+    opacity: 0.75;
+    margin-bottom: 1px;
+    color: #4A4A4A;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lesson-location {
+    font-size: 9px;
+    opacity: 0.65;
+    color: #4A4A4A;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 莫兰迪色系的课程卡片颜色 - 低饱和度高雅设计 */
+.lesson-card.color-1 {
+    background: #E8DFD7;
+    border-left-color: #A89968;
+}
+
+.lesson-card.color-1:hover {
+    border-left-color: #C4A76C;
+}
+
+/* 选修课样式 - 课程名字颜色不同 */
+.lesson-card.elective .lesson-name {
+    color: #9B8B9E;
+}
+
+.lesson-card.color-2 {
+    background: #E0E5E0;
+    border-left-color: #7A8B6F;
+}
+
+.lesson-card.color-2:hover {
+    border-left-color: #96A885;
+}
+
+.lesson-card.color-3 {
+    background: #E5DCE0;
+    border-left-color: #9B8B9E;
+}
+
+.lesson-card.color-3:hover {
+    border-left-color: #B5A5B8;
+}
+
+.lesson-card.color-4 {
+    background: #DCD9E8;
+    border-left-color: #6B7FA8;
+}
+
+.lesson-card.color-4:hover {
+    border-left-color: #8A9CBD;
+}
+
+.lesson-card.color-5 {
+    background: #E8E0D5;
+    border-left-color: #A89968;
+}
+
+.lesson-card.color-5:hover {
+    border-left-color: #C4A76C;
+}
+
+.lesson-card.color-6 {
+    background: #E5E0DC;
+    border-left-color: #8A8884;
+}
+
+.lesson-card.color-6:hover {
+    border-left-color: #A5A199;
+}
+
+.lesson-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 62, 80, 0.35);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+.lesson-modal.active {
+    display: flex;
+}
+
+.json-format-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 62, 80, 0.35);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+.json-format-modal.active {
+    display: flex;
+}
+
+.lesson-modal-content {
+    background: #FFFFFF;
+    border-radius: 0;
+    padding: 40px;
+    max-width: 500px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #E8E5E0;
+    position: relative;
+}
+
+.json-format-content {
+    background: #FFFFFF;
+    border-radius: 0;
+    padding: 40px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #E8E5E0;
+    position: relative;
+}
+
+.json-field-item {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #F0E9E0;
+}
+
+.json-field-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.json-field-name {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #2C3E50;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.json-field-type {
+    display: inline-block;
+    background: #F5F2ED;
+    color: #A89968;
+    padding: 4px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+.json-field-desc {
+    color: #4A4A4A;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.json-field-example {
+    background: #F9F7F4;
+    padding: 8px 12px;
+    border-left: 2px solid #C4A76C;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #4A4A4A;
+    overflow-x: auto;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #2C3E50;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #E8E5E0;
+    padding-bottom: 16px;
+    letter-spacing: 0.3px;
+}
+
+.modal-item {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #F0E9E0;
+}
+
+.modal-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.modal-label {
+    font-weight: 600;
+    color: #A89968;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+}
+
+.modal-value {
+    color: #4A4A4A;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px solid #D4C5B9;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: #4A4A4A;
+}
+
+.modal-close:hover {
+    background: #F5F2ED;
+    border-color: #A89968;
+    color: #A89968;
+}
+
+.empty-state {
+    background: #FFFFFF;
+    border-radius: 0;
+    padding: 80px 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #E8E5E0;
+}
+
+.empty-icon {
+    font-size: 56px;
+    margin-bottom: 24px;
+    opacity: 0.6;
+}
+
+.empty-state p {
+    color: #A89968;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}
+
+.error-message {
+    background: #FFF8F0;
+    color: #9B6B52;
+    padding: 16px 20px;
+    border-radius: 0;
+    margin-bottom: 24px;
+    border-left: 2px solid #D4A574;
+    font-size: 14px;
+    border: 1px solid #E8D4C4;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 32px 0 28px 0;
+        margin-bottom: 32px;
+    }
+
+    header h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .controls {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-upload,
+    .btn-load,
+    .btn-download {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+
+    .info-panel {
+        flex-direction: column;
+        gap: 24px;
+        padding: 24px;
+    }
+
+    .info-item {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .day-selector {
+        padding: 24px;
+    }
+
+    .selector-group {
+        gap: 8px;
+    }
+
+    .day-buttons {
+        gap: 8px;
+    }
+
+    .day-btn {
+        flex: 0 0 calc(33.333% - 6px);
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+
+    .timetable {
+        grid-template-columns: 55px repeat(12, 1fr);
+        font-size: 11px;
+    }
+
+    .timetable-header {
+        padding: 12px 4px;
+        font-size: 11px;
+    }
+
+    .timetable-time-cell {
+        padding: 10px 6px;
+        font-size: 11px;
+    }
+
+    .timetable-cell {
+        min-height: 70px;
+    }
+
+    .lesson-card {
+        padding: 4px;
+        margin: 2px 1px;
+    }
+
+    .lesson-name {
+        font-size: 9px;
+        margin-bottom: 1px;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
+
+    .lesson-teacher {
+        font-size: 8px;
+        margin-bottom: 0;
+    }
+
+    .lesson-location {
+        font-size: 7px;
+        margin: 0;
+    }
+
+    .lesson-modal-content {
+        padding: 32px;
+        max-width: calc(100% - 40px);
+    }
+
+    .empty-state {
+        padding: 60px 16px;
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .empty-state p {
+        font-size: 15px;
+    }
+}
+
+/* 周视图特殊处理 - 防止课程卡片溢出 */
+.timetable.week-view .lesson-card {
+    padding: 4px;
+    margin: 2px 1px;
+}
+
+.timetable.week-view .lesson-name {
+    font-size: 10px;
+    margin-bottom: 1px;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+}
+
+.timetable.week-view .lesson-teacher {
+    font-size: 9px;
+    margin-bottom: 0;
+}
+
+.timetable.week-view .lesson-location {
+    font-size: 8px;
+    margin: 0;
+}
+
+/* 日视图中的课程卡片 - 保留原来的尺寸 */
+.timetable.day-view .lesson-card {
+    padding: 6px;
+    margin: 3px 2px;
+}
+
+.timetable.day-view .lesson-name {
+    font-size: 11px;
+    margin-bottom: 2px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.timetable.day-view .lesson-teacher {
+    font-size: 10px;
+    margin-bottom: 1px;
+}
+
+.timetable.day-view .lesson-location {
+    font-size: 9px;
+}
